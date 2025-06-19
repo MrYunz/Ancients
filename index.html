@@ -19,6 +19,17 @@
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap');
 
+
+    document.addEventListener('keydown', function(e) {
+    // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+    if (
+    e.key === 'F12' ||
+    (e.ctrlKey && e.shiftKey && ['I','J'].includes(e.key.toUpperCase())) ||
+    (e.ctrlKey && e.key.toUpperCase() === 'U')
+    ) {
+    e.preventDefault();
+    }
+    });
     /* Reset & box‑sizing */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
    
@@ -338,6 +349,7 @@
   </style>
 </head>
 <body>
+  <body oncontextmenu="return false;"> 
   <audio autoplay loop volume="0.8">
   <source src="WastlandsByKolekutbeatz.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
