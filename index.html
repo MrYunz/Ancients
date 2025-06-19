@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -16,10 +16,15 @@
       font-family: 'Press Start 2P', monospace;
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 1rem;
+    }
+
+    /* Centered container */
+    .container {
+      width: 100%;
+      max-width: 360px;
       text-align: center;
     }
 
@@ -30,12 +35,10 @@
       user-select: text;
     }
 
-    /* Challenge container centered */
+    /* Challenge */
     #challenge {
-      width: 100%;
-      max-width: 360px;
+      margin-bottom: 2rem;
     }
-
     .alphabet-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -43,7 +46,6 @@
       width: 100%;
       margin-bottom: 1rem;
     }
-
     .alphabet-grid input {
       background: #221a0d;
       border: 2px solid #553d24;
@@ -96,12 +98,9 @@
       letter-spacing: 1px;
     }
 
-    /* Translator section also centered */
+    /* Translator */
     #translator {
       display: none;
-      width: 100%;
-      max-width: 360px;
-      margin-top: 2rem;
     }
     label {
       color: #ffd27f;
@@ -137,25 +136,24 @@
   </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Yunz Lab</h1>
 
-  <h1>Yunz Lab</h1>
+    <div id="challenge">
+      <div class="alphabet-grid" id="oghamInputs"></div>
+      <button onclick="checkAnswers()">UNLOCK</button>
+      <p id="error">Incorrect. Try again.</p>
+    </div>
 
-  <div id="challenge">
-    <div class="alphabet-grid" id="oghamInputs"></div>
-    <button onclick="checkAnswers()">UNLOCK</button>
-    <p id="error">Incorrect. Try again.</p>
-  </div>
-
-  <div id="translator">
-    <label for="inputEnglish">English → Ogham</label>
-    <textarea id="inputEnglish" placeholder="Type English text..."></textarea>
-    <textarea id="outputOgham" readonly placeholder="Ogham output..."></textarea>
-
-    <hr />
-
-    <label for="inputOgham">Ogham → English</label>
-    <textarea id="inputOgham" placeholder="Paste Ogham here..."></textarea>
-    <textarea id="outputEnglish" readonly placeholder="English output..."></textarea>
+    <div id="translator">
+      <label for="inputEnglish">English → Ogham</label>
+      <textarea id="inputEnglish" placeholder="Type English text..."></textarea>
+      <textarea id="outputOgham" readonly placeholder="Ogham output..."></textarea>
+      <hr />
+      <label for="inputOgham">Ogham → English</label>
+      <textarea id="inputOgham" placeholder="Paste Ogham here..."></textarea>
+      <textarea id="outputEnglish" readonly placeholder="English output..."></textarea>
+    </div>
   </div>
 
   <script>
@@ -169,7 +167,6 @@
     const reverseMap = {};
     for (let k in oghamMap) reverseMap[oghamMap[k]] = k;
 
-    // Fixed scrambled order
     const scrambled = [
       ['R',oghamMap.R],['G',oghamMap.G],['T',oghamMap.T],
       ['K',oghamMap.K],['B',oghamMap.B],['P',oghamMap.P],
@@ -182,33 +179,29 @@
       ['I',oghamMap.I],['D',oghamMap.D]
     ];
 
-    // Build challenge inputs
     function buildInputs(){
-      const container = document.getElementById('oghamInputs');
-      container.innerHTML = '';
-      scrambled.forEach(([ltr,sym])=>{
-        let inp = document.createElement('input');
-        inp.dataset.symbol = sym;
-        inp.placeholder = sym;
-        inp.maxLength = 1;
-        container.appendChild(inp);
+      const c = document.getElementById('oghamInputs');
+      c.innerHTML = '';
+      scrambled.forEach(([l,s])=>{
+        let i = document.createElement('input');
+        i.dataset.symbol = s;
+        i.placeholder = s;
+        i.maxLength = 1;
+        c.appendChild(i);
       });
     }
 
-    // Check answers & unlock
     function checkAnswers(){
-      let allOK = true;
-      document.querySelectorAll('#oghamInputs input').forEach(inp=>{
-        if ((inp.value.toUpperCase()||'') === reverseMap[inp.dataset.symbol]){
-          inp.classList.add('correct');
-          inp.classList.remove('error');
+      let ok = true;
+      document.querySelectorAll('#oghamInputs input').forEach(i=>{
+        if ((i.value.toUpperCase()||'') === reverseMap[i.dataset.symbol]){
+          i.classList.add('correct'); i.classList.remove('error');
         } else {
-          inp.classList.add('error');
-          inp.classList.remove('correct');
-          allOK = false;
+          i.classList.add('error'); i.classList.remove('correct');
+          ok = false;
         }
       });
-      if (allOK){
+      if (ok){
         localStorage.setItem('oghamUnlocked','1');
         document.getElementById('challenge').style.display='none';
         document.getElementById('translator').style.display='block';
@@ -217,21 +210,14 @@
       }
     }
 
-    // Translators
-    function encodeOgham(txt){
-      return txt.split('').map(c=>oghamMap[c.toUpperCase()]||c).join('');
-    }
-    function decodeOgham(txt){
-      return txt.split('').map(c=>reverseMap[c]||c).join('');
-    }
-    document.getElementById('inputEnglish').addEventListener('input',e=>{
-      document.getElementById('outputOgham').value = encodeOgham(e.target.value);
-    });
-    document.getElementById('inputOgham').addEventListener('input',e=>{
-      document.getElementById('outputEnglish').value = decodeOgham(e.target.value);
-    });
+    function encodeOgham(t){ return t.split('').map(c=>oghamMap[c.toUpperCase()]||c).join(''); }
+    function decodeOgham(t){ return t.split('').map(c=>reverseMap[c]||c).join(''); }
 
-    // On load
+    document.getElementById('inputEnglish')
+      .addEventListener('input',e=> document.getElementById('outputOgham').value = encodeOgham(e.target.value));
+    document.getElementById('inputOgham')
+      .addEventListener('input',e=> document.getElementById('outputEnglish').value = decodeOgham(e.target.value));
+
     window.addEventListener('DOMContentLoaded',()=>{
       if (localStorage.getItem('oghamUnlocked')){
         document.getElementById('challenge').style.display='none';
