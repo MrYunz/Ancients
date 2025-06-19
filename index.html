@@ -1,110 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Yunz Lab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap');
-    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
-    html, body { height:100%; }
+    /* Reset & Base */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
     body {
-      background:#0a0a0a;
-      color:#e0c097;
-      font-family:'Press Start 2P',monospace;
-      font-size:14px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:1rem;
-      background-image:repeating-linear-gradient(0deg,#0a0a0a 0, #111 1px, #0a0a0a 2px),repeating-linear-gradient(90deg,#0a0a0a 0, #111 1px, #0a0a0a 2px);
-      background-size:4px 4px;
-      position:relative;
-      user-select:none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: #0a0a0a;
+      color: #e0c097;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 14px;
+      background-image:
+        repeating-linear-gradient(0deg, #0a0a0a 0, #111 1px, #0a0a0a 2px),
+        repeating-linear-gradient(90deg, #0a0a0a 0, #111 1px, #0a0a0a 2px);
+      background-size: 4px 4px;
+      user-select: none;
     }
-    .container { position:relative; width:100%; max-width:480px; text-align:center; z-index:1; }
+    .container {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+    }
+
+    /* Title */
     h1 {
-      font-family:'Orbitron',monospace;
-      font-weight:900;
-      font-size:3rem;
-      letter-spacing:4px;
-      color:#ffb347;
-      text-shadow:4px 4px 0 #331f12,0 0 8px #ff9533;
-      margin-bottom:2rem;
-      animation:titlePulse 3s ease-in-out infinite alternate;
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: 3rem;
+      letter-spacing: 4px;
+      color: #ffb347;
+      text-shadow: 4px 4px 0 #331f12, 0 0 8px #ff9533;
+      margin-bottom: 2rem;
+      animation: pulse 3s ease-in-out infinite alternate;
     }
-    @keyframes titlePulse { from{text-shadow:4px 4px 0 #331f12,0 0 8px #ff9533;}to{text-shadow:4px 4px 0 #331f12,0 0 16px #ff9533;} }
-    /* Audio Controls */
-    .audio-control { position:absolute; top:1rem; right:1rem; display:flex; flex-direction:column; align-items:flex-end; }
-    .audio-control svg { width:24px; height:24px; fill:#ffd27f; cursor:pointer; transition:fill 0.2s; }
-    .audio-control svg:hover { fill:#ffb347; }
+    @keyframes pulse {
+      from { text-shadow: 4px 4px 0 #331f12, 0 0 8px #ff9533; }
+      to   { text-shadow: 4px 4px 0 #331f12, 0 0 16px #ff9533; }
+    }
+
+    /* Audio Control */
+    .audio-control {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.5rem;
+    }
+    .audio-toggle {
+      width: 24px;
+      height: 24px;
+      fill: #ffd27f;
+      cursor: pointer;
+      transition: fill 0.2s;
+    }
+    .audio-toggle:hover { fill: #ffb347; }
     .audio-slider {
-      display:none;
-      margin-top:4px;
-      width:80px;
-      height:12px;
-      background:#553d24;
-      outline:2px solid #331f12;
-      outline-offset:-2px;
-    }
-    .audio-slider::-webkit-slider-runnable-track {
-      height:12px;
-      background: #775533;
+      width: 80px;
+      height: 12px;
+      background: #553d24;
+      outline: 2px solid #331f12;
+      outline-offset: -2px;
+      display: none;
     }
     .audio-slider::-webkit-slider-thumb {
-      -webkit-appearance:none;
-      appearance:none;
-      width:12px;
-      height:12px;
-      background:#ffd27f;
-      border:2px solid #331f12;
-      cursor:pointer;
-      margin-top:0;
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      background: #ffd27f;
+      border: 2px solid #331f12;
+      cursor: pointer;
     }
-    .audio-slider:focus { outline:none; }
+    .audio-slider:focus { outline: none; }
 
-    /* Challenge */
-    #challenge { margin-bottom:2rem; }
-    .alphabet-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin:0 auto 1rem; width:fit-content; padding:16px; background:#221a0d; border:2px solid #553d24; box-shadow:inset 2px 2px 0 #000,inset -2px -2px 0 #775533,0 0 0 2px #331f12; }
-    .alphabet-grid input { background:#221a0d; border:2px solid #553d24; color:#e0c097; font-size:1.2rem; text-align:center; width:80px;height:50px; text-shadow:1px 1px 0 #000; transition:all 0.2s; box-shadow:inset 2px 2px 0 #000,inset -1px -1px 0 #443322; }
-    .alphabet-grid input::placeholder{color:#ffb347;font-size:1.5rem;text-shadow:1px 1px 0 #000;}
-    .alphabet-grid input.correct{border-color:#ffd27f;box-shadow:0 0 6px #ffd27f;background:#3b2a1c;}
-    .alphabet-grid input.error{border-color:#e05a00;box-shadow:0 0 6px #e05a00;background:#331f12;}
-    @keyframes glitch{0%,100%{transform:none;}20%,60%{transform:translateX(-5px);}40%,80%{transform:translateX(5px);}}
-    .glitch{animation:glitch 0.4s ease-in-out;}
+    /* Challenge Grid */
+    #challenge {
+      margin-bottom: 2rem;
+    }
+    .alphabet-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin: 0 auto 1rem;
+      padding: 16px;
+      background: #221a0d;
+      border: 2px solid #553d24;
+      box-shadow: inset 2px 2px 0 #000, inset -2px -2px 0 #775533, 0 0 0 2px #331f12;
+    }
+    .alphabet-grid input {
+      width: 80px;
+      height: 50px;
+      background: #221a0d;
+      border: 2px solid #553d24;
+      color: #e0c097;
+      font-size: 1.2rem;
+      text-align: center;
+      text-shadow: 1px 1px 0 #000;
+      transition: all 0.2s;
+    }
+    .alphabet-grid input::placeholder {
+      color: #ffb347;
+      font-size: 1.5rem;
+      text-shadow: 1px 1px 0 #000;
+    }
+    .alphabet-grid input.correct { border-color: #ffd27f; box-shadow: 0 0 6px #ffd27f; background: #3b2a1c; }
+    .alphabet-grid input.error { border-color: #e05a00; box-shadow: 0 0 6px #e05a00; background: #331f12; }
+    @keyframes shake { 0%,100%{transform:none;}20%,60%{transform:translateX(-5px);}40%,80%{transform:translateX(5px);} }
+    .glitch { animation: shake 0.4s ease-in-out; }
 
-    button{padding:12px 24px;font-size:1rem;background:#ffd27f;border:2px solid #e05a00;color:#331f12;cursor:pointer;box-shadow:2px 2px 0 #000;}
-    button:hover{background:#e05a00;color:#ffd27f;}
-    #error{color:#e05a00;margin-top:1rem;display:none;}
-    #cooldown{color:#ffb347;margin-top:1rem; display:none;}
+    /* Buttons & Messages */
+    button {
+      padding: 12px 24px;
+      font-size: 1rem;
+      background: #ffd27f;
+      border: 2px solid #e05a00;
+      color: #331f12;
+      cursor: pointer;
+      box-shadow: 2px 2px 0 #000;
+      transition: background 0.2s;
+    }
+    button:hover { background: #e05a00; color: #ffd27f; }
+    #error, #cooldown { margin-top: 1rem; font-size: 0.9rem; }
+    #error { color: #e05a00; display: none; }
+    #cooldown { color: #ffb347; display: none; }
 
     /* Translator */
-    #translator{display:none;}
-    .reader-btn{margin-bottom:1rem;padding:10px 20px;font-size:1rem;background:#ffb347;border:none;color:#0a0a0a;cursor:pointer;}
-    label{color:#ffd27f;margin-top:1.5rem;display:block;font-size:1rem;}
-    textarea{width:100%;height:120px;background:linear-gradient(135deg,#221a0d,#1a140a);border:2px solid #553d24;color:#e0c097;padding:8px;font-size:1rem;text-shadow:0 0 4px #ff9533;transition:all 0.3s;}
-    textarea:focus{outline:none;border-color:#ffd27f;box-shadow:0 0 8px #ffd27f;background:linear-gradient(135deg,#3b2a1c,#2d1f13);}
-    textarea[readonly]{background:linear-gradient(135deg,#1a140a,#221a0d);color:#ffb347;}
-    hr{border:none;border-top:2px solid #553d24;margin:2rem 0;}
+    #translator { display: none; }
+    .reader-btn {
+      margin-bottom: 1rem;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background: #ffb347;
+      border: none;
+      color: #0a0a0a;
+      cursor: pointer;
+    }
+    label { color: #ffd27f; margin-top: 1.5rem; display: block; font-size: 1rem; }
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 8px;
+      background: linear-gradient(135deg, #221a0d, #1a140a);
+      border: 2px solid #553d24;
+      color: #e0c097;
+      font-size: 1rem;
+      text-shadow: 0 0 4px #ff9533;
+      transition: all 0.3s;
+    }
+    textarea:focus { outline: none; border-color: #ffd27f; box-shadow: 0 0 8px #ffd27f; background: linear-gradient(135deg, #3b2a1c, #2d1f13); }
+    textarea[readonly] { background: linear-gradient(135deg, #1a140a, #221a0d); color: #ffb347; }
+    hr { border: none; border-top: 2px solid #553d24; margin: 2rem 0; }
   </style>
 </head>
 <body oncontextmenu="return false;" onkeydown="if(event.key==='F12'||(event.ctrlKey&&event.shiftKey&&(event.key==='I'||event.key==='J'))||(event.ctrlKey&&event.key==='U'))event.preventDefault();">
   <div class="container">
     <h1>YUNZ LAB</h1>
+
+    <!-- Audio Control -->
     <div class="audio-control">
-      <svg id="audioToggle" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg>
+      <svg id="audioToggle" class="audiotoggle" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg>
       <input id="volumeSlider" class="audio-slider" type="range" min="0" max="1" step="0.01" value="0.5">
     </div>
-    <audio id="bgAudio" loop><source src="WastlandsByKolekutbeatz.mp3" type="audio/mpeg"></audio>
+    <audio id="bgAudio" loop>
+      <source src="WastlandsByKolekutbeatz.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Challenge -->
     <div id="challenge">
-      <div class="alphabet-grid" id="oghamInputs"></div>
+      <div class="alphabetgrid" id="oghamInputs"></div>
       <button id="unlockBtn" onclick="checkAnswers()">UNLOCK</button>
       <p id="error">WRONG SEQUENCE...</p>
       <p id="cooldown"></p>
     </div>
+
+    <!-- Translator -->
     <div id="translator">
-      <button class="reader-btn" onclick="enterReader()">READER</button>
+      <button class="readerbtn" onclick="enterReader()">READER</button>
       <label for="inputEnglish">ENCODE MESSAGE</label>
       <textarea id="inputEnglish" placeholder="Enter message..."></textarea>
       <textarea id="outputOgham" readonly placeholder="Symbols..."></textarea>
@@ -114,7 +196,116 @@
       <textarea id="outputEnglish" readonly placeholder="Translation..."></textarea>
     </div>
   </div>
+
   <script>
-    const oghamMap={A:'ᚁ',B:'ᚂ',C:'ᚃ',D:'ᚄ',E:'ᚅ',F:'ᚆ',G:'ᚇ',H:'ᚈ',I:'ᚉ',J:'ᚊ',K:'ᚋ',L:'ᚌ',M:'ᚍ',N:'ᚎ',O:'ᚏ',P:'ᚐ',Q:'ᚑ',R:'ᚒ',S:'ᚓ',T:'ᚔ',U:'ᚕ',V:'ᚖ',W:'ᚗ',X:'ᚘ',Y:'ᚙ',Z:'᚜'};
-    const reverseMap={};for(let k in oghamMap)reverseMap[oghamMap[k]]=k;
-    const scrambled=[['R',oghamMap.R],['G',oghamMap.G],['T',oghamMap.T],['K',oghamMap.K],['B',oghamMap.B],['P',oghamMap.P],['X',oghamMap.X],['L',oghamMap.L],['N',oghamMap.N],['H',oghamMap.H],['J',oghamMap.J],['S',oghamMap.S],['E',oghamMap.E],['Y',oghamMap.Y],['A',oghamMap.A],['W',oghamMap.W],['M',oghamMap.M],['Z',oghamMap.Z],['O',oghamMap.O],['C',oghamMap.C],['
+    // Mappings
+    const oghamMap = {A:'ᚁ',B:'ᚂ',C:'ᚃ',D:'ᚄ',E:'ᚅ',F:'ᚆ',G:'ᚇ',H:'ᚈ',I:'ᚉ',J:'ᚊ',K:'ᚋ',L:'ᚌ',M:'ᚍ',N:'ᚎ',O:'ᚏ',P:'ᚐ',Q:'ᚑ',R:'ᚒ',S:'ᚓ',T:'ᚔ',U:'ᚕ',V:'ᚖ',W:'ᚗ',X:'ᚘ',Y:'ᚙ',Z:'᚜'};
+    const reverseMap = Object.fromEntries(Object.entries(oghamMap).map(([k,v])=>[v,k]));
+    const scrambled = [['R',oghamMap.R],['G',oghamMap.G],['T',oghamMap.T],['K',oghamMap.K],['B',oghamMap.B],['P',oghamMap.P],['X',oghamMap.X],['L',oghamMap.L],['N',oghamMap.N],['H',oghamMap.H],['J',oghamMap.J],['S',oghamMap.S],['E',oghamMap.E],['Y',oghamMap.Y],['A',oghamMap.A],['W',oghamMap.W],['M',oghamMap.M],['Z',oghamMap.Z],['O',oghamMap.O],['C',oghamMap.C],['Q',oghamMap.Q],['F',oghamMap.F],['U',oghamMap.U],['V',oghamMap.V],['I',oghamMap.I],['D',oghamMap.D]];
+
+    // State
+    let attempts = 0;
+    let lockUntil = 0;
+
+    // Elements
+    const ogInputs = document.getElementById('oghamInputs');
+    const errorMsg = document.getElementById('error');
+    const cooldownMsg = document.getElementById('cooldown');
+    const unlockBtn = document.getElementById('unlockBtn');
+    const challengeEl = document.getElementById('challenge');
+    const translatorEl = document.getElementById('translator');
+    const bgAudio = document.getElementById('bgAudio');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const audioToggle = document.getElementById('audioToggle');
+
+    // Build inputs
+    function buildInputs() {
+      ogInputs.innerHTML = '';
+      scrambled.forEach(([_, sym]) => {
+        const inp = document.createElement('input');
+        inp.placeholder = sym;
+        inp.dataset.sym = sym;
+        inp.maxLength = 1;
+        inp.addEventListener('input', e => e.target.value = e.target.value.toUpperCase());
+        ogInputs.appendChild(inp);
+      });
+    }
+
+    // Cooldown
+    function startCooldown() {
+      lockUntil = Date.now() + 60000;
+      attemptReset();
+      tickCooldown();
+    }
+    function tickCooldown() {
+      const now = Date.now();
+      if (now < lockUntil) {
+        unlockBtn.disabled = true;
+        cooldownMsg.textContent = `COOLDOWN: ${Math.ceil((lockUntil - now)/1000)}s`;
+        cooldownMsg.style.display = 'block';
+        setTimeout(tickCooldown, 500);
+      } else {
+        unlockBtn.disabled = false;
+        cooldownMsg.style.display = 'none';
+        attempts = 0;
+        buildInputs();
+      }
+    }
+    function attemptReset() {
+      attempts = 0;
+      document.querySelectorAll('#oghamInputs input').forEach(i => i.value = '');
+    }
+
+    // Check answers
+    function checkAnswers() {
+      if (Date.now() < lockUntil) return;
+      errorMsg.style.display = 'none';
+
+      const inputs = [...ogInputs.children];
+      const allCorrect = inputs.every(inp => inp.value === reverseMap[inp.dataset.sym]);
+
+      if (allCorrect) {
+        localStorage.setItem('unlocked', '1');
+        challengeEl.style.display = 'none';
+        translatorEl.style.display = 'block';
+      } else {
+        attempts++;
+        challengeEl.classList.add('glitch');
+        setTimeout(() => challengeEl.classList.remove('glitch'), 400);
+
+        if (attempts >= 3) {
+          startCooldown();
+        } else {
+          errorMsg.style.display = 'block';
+        }
+      }
+    }
+
+    // Translate
+    function encode(text) {return text.split('').map(c=>oghamMap[c.toUpperCase()]||c).join('');}
+    function decode(text) {return text.split('').map(c=>reverseMap[c]||c).join('');}
+    document.getElementById('inputEnglish').addEventListener('input', e=> document.getElementById('outputOgham').value = encode(e.target.value));
+    document.getElementById('inputOgham').addEventListener('input', e=> document.getElementById('outputEnglish').value = decode(e.target.value));
+
+    // Reader button
+    function enterReader() {
+      challengeEl.style.display = 'none';
+      translatorEl.style.display = 'block';
+    }
+
+    // Audio controls
+    audioToggle.addEventListener('click', () => {
+      volumeSlider.style.display = volumeSlider.style.display === 'block' ? 'none' : 'block';
+    });
+    volumeSlider.addEventListener('input', e => bgAudio.volume = e.target.value);
+
+    // Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem('unlocked')) enterReader();
+      buildInputs();
+      bgAudio.volume = volumeSlider.value;
+      bgAudio.play().catch(()=>{});
+    });
+  </script>
+</body>
+</html>
