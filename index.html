@@ -12,6 +12,8 @@
       color: #ccc;
       font-family: 'Press Start 2P', monospace, monospace;
       margin: 2em;
+      padding-left: 1rem;
+      padding-right: 1rem;
       user-select: none;
       -webkit-user-select: none;
       -moz-user-select: none;
@@ -28,8 +30,9 @@
       display: grid;
       grid-template-columns: repeat(6, 1fr);
       gap: 0.5em;
-      max-width: 500px;
-      margin: 0 auto 1rem auto;
+      max-width: 480px; /* controls max width */
+      margin: 0 auto 1rem auto;   /* centers horizontally */
+      box-sizing: border-box;
     }
     .alphabet-grid input {
       background: #111;
@@ -155,44 +158,38 @@
   </div>
 
   <script>
-    const oghamMap = {
-      'A': 'ᚁ', 'B': 'ᚂ', 'C': 'ᚃ', 'D': 'ᚄ', 'E': 'ᚅ',
-      'F': 'ᚆ', 'G': 'ᚇ', 'H': 'ᚈ', 'I': 'ᚉ', 'J': 'ᚊ',
-      'K': 'ᚋ', 'L': 'ᚌ', 'M': 'ᚍ', 'N': 'ᚎ', 'O': 'ᚏ',
-      'P': 'ᚐ', 'Q': 'ᚑ', 'R': 'ᚒ', 'S': 'ᚓ', 'T': 'ᚔ',
-      'U': 'ᚕ', 'V': 'ᚖ', 'W': 'ᚗ', 'X': 'ᚘ', 'Y': 'ᚙ', 'Z': '᚜'
-    };
+  const oghamMap = {
+    'A': 'ᚁ', 'B': 'ᚂ', 'C': 'ᚃ', 'D': 'ᚄ', 'E': 'ᚅ',
+    'F': 'ᚆ', 'G': 'ᚇ', 'H': 'ᚈ', 'I': 'ᚉ', 'J': 'ᚊ',
+    'K': 'ᚋ', 'L': 'ᚌ', 'M': 'ᚍ', 'N': 'ᚎ', 'O': 'ᚏ',
+    'P': 'ᚐ', 'Q': 'ᚑ', 'R': 'ᚒ', 'S': 'ᚓ', 'T': 'ᚔ',
+    'U': 'ᚕ', 'V': 'ᚖ', 'W': 'ᚗ', 'X': 'ᚘ', 'Y': 'ᚙ', 'Z': '᚜'
+  };
 
-    const reverseMap = {};
-    for (let key in oghamMap) reverseMap[oghamMap[key]] = key;
+  const reverseMap = {};
+  for (let key in oghamMap) reverseMap[oghamMap[key]] = key;
 
-    function translateToOgham(text) {
-      return text.split('').map(c => oghamMap[c.toUpperCase()] || c).join('');
+  // Function to shuffle an array (Fisher-Yates)
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
     }
+    return array;
+  }
 
-    function translateFromOgham(text) {
-      return text.split('').map(c => reverseMap[c] || c).join('');
-    }
+  // Create inputs for each ogham letter scrambled
+  const oghamInputs = document.getElementById('oghamInputs');
+  const correctAnswers = Object.entries(oghamMap);
+  const scrambled = shuffleArray(correctAnswers.slice()); // copy and shuffle
 
-    document.getElementById('inputEnglish').addEventListener('input', () => {
-      document.getElementById('outputOgham').value = translateToOgham(document.getElementById('inputEnglish').value);
-    });
-
-    document.getElementById('inputOgham').addEventListener('input', () => {
-      document.getElementById('outputEnglish').value = translateFromOgham(document.getElementById('inputOgham').value);
-    });
-
-    // Create inputs for each ogham letter
-    const oghamInputs = document.getElementById('oghamInputs');
-    const correctAnswers = Object.entries(oghamMap);
-
-    correctAnswers.forEach(([letter, symbol]) => {
-      const input = document.createElement('input');
-      input.dataset.symbol = symbol;
-      input.placeholder = symbol;
-      input.maxLength = 1;
-      oghamInputs.appendChild(input);
-    });
+  scrambled.forEach(([letter, symbol]) => {
+    const input = document.createElement('input');
+    input.dataset.symbol = symbol;
+    input.placeholder = symbol;
+    input.maxLength = 1;
+    oghamInputs.appendChild(input);
+  });
 
     function checkAnswers() {
       const inputs = oghamInputs.querySelectorAll('input');
