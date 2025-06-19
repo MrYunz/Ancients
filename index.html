@@ -12,8 +12,9 @@
       color: #ccc;
       font-family: 'Press Start 2P', monospace, monospace;
       margin: 2em;
-      padding-left: 1rem;
-      padding-right: 1rem;
+      padding-left: 1rem;   /* Add horizontal padding */
+      padding-right: 1rem;  /* Add horizontal padding */
+      box-sizing: border-box; /* Include padding in width */
       user-select: none;
       -webkit-user-select: none;
       -moz-user-select: none;
@@ -27,6 +28,7 @@
       user-select: text;
     }
     .alphabet-grid {
+      box-sizing: border-box;
       display: grid;
       grid-template-columns: repeat(6, 1fr);
       gap: 0.5em;
@@ -157,7 +159,7 @@
     <textarea id="outputEnglish" readonly placeholder="English output will appear here..."></textarea>
   </div>
 
-  <script>
+<script>
   const oghamMap = {
     'A': 'ᚁ', 'B': 'ᚂ', 'C': 'ᚃ', 'D': 'ᚄ', 'E': 'ᚅ',
     'F': 'ᚆ', 'G': 'ᚇ', 'H': 'ᚈ', 'I': 'ᚉ', 'J': 'ᚊ',
@@ -169,52 +171,112 @@
   const reverseMap = {};
   for (let key in oghamMap) reverseMap[oghamMap[key]] = key;
 
-  // Function to shuffle an array (Fisher-Yates)
-  function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
+  // Fixed scrambled order (manually shuffled)
+  const scrambledAlphabet = [
+    ['R', oghamMap['R']],
+    ['G', oghamMap['G']],
+    ['T', oghamMap['T']],
+    ['K', oghamMap['K']],
+    ['B', oghamMap['B']],
+    ['P', oghamMap['P']],
+    ['X', oghamMap['X']],
+    ['L', oghamMap['L']],
+    ['N', oghamMap['N']],
+    ['H', oghamMap['H']],
+    ['J', oghamMap['J']],
+    ['S', oghamMap['S']],
+    ['E', oghamMap['E']],
+    ['Y', oghamMap['Y']],
+    ['A', oghamMap['A']],
+    ['W', oghamMap['W']],
+    ['M', oghamMap['M']],
+    ['Z', oghamMap['Z']],
+    ['O', oghamMap['O']],
+    ['C', oghamMap['C']],
+    ['Q', oghamMap['Q']],
+    ['F', oghamMap['F']],
+    ['U', oghamMap['U']],
+    ['V', oghamMap['V']],
+    ['I', oghamMap['I']],
+    ['D', oghamMap['D']]
+  ];
+
+  const oghamInputs = document.getElementById('oghamInputs');
+
+  // Function to build inputs based on scrambledAlphabet
+  function buildInputs() {
+    oghamInputs.innerHTML = ''; // clear any existing inputs
+    scrambledAlphabet.forEach(([letter, symbol]) => {
+      const input = document.createElement('input');
+      input.dataset.symbol = symbol;
+      input.placeholder = symbol;
+      input.maxLength = 1;
+      oghamInputs.appendChild(input);
+    });
   }
 
-  // Create inputs for each ogham letter scrambled
-  const oghamInputs = document.getElementById('oghamInputs');
-  const correctAnswers = Object.entries(oghamMap);
-  const scrambled = shuffleArray(correctAnswers.slice()); // copy and shuffle
+  // Check unlock status on page load
+  function isUnlocked() {
+    return localStorage.getItem('oghamUnlocked') === 'true';
+  }
 
-  scrambled.forEach(([letter, symbol]) => {
-    const input = document.createElement('input');
-    input.dataset.symbol = symbol;
-    input.placeholder = symbol;
-    input.maxLength = 1;
-    oghamInputs.appendChild(input);
+  function setUnlocked() {
+    localStorage.setItem('oghamUnlocked', 'true');
+  }
+
+  function checkAnswers() {
+    const inputs = oghamInputs.querySelectorAll('input');
+    let allCorrect = true;
+    inputs.forEach(input => {
+      const expected = reverseMap[input.dataset.symbol];
+      if (input.value.toUpperCase() === expected) {
+        input.classList.remove('error');
+        input.classList.add('correct');
+      } else {
+        input.classList.remove('correct');
+        input.classList.add('error');
+        allCorrect = false;
+      }
+    });
+
+    const errorMsg = document.getElementById('error');
+    if (allCorrect) {
+      setUnlocked();
+      document.getElementById('translator').style.display = 'block';
+      document.getElementById('challenge').style.display = 'none';
+      errorMsg.style.display = 'none';
+    } else {
+      errorMsg.style.display = 'block';
+    }
+  }
+
+  // On page load
+  window.onload = function() {
+    if (isUnlocked()) {
+      document.getElementById('translator').style.display = 'block';
+      document.getElementById('challenge').style.display = 'none';
+    } else {
+      buildInputs();
+    }
+  };
+
+  // Event listeners for translator textareas (if needed)
+  document.getElementById('inputEnglish').addEventListener('input', () => {
+    document.getElementById('outputOgham').value = translateToOgham(document.getElementById('inputEnglish').value);
   });
 
-    function checkAnswers() {
-      const inputs = oghamInputs.querySelectorAll('input');
-      let allCorrect = true;
-      inputs.forEach(input => {
-        const expected = reverseMap[input.dataset.symbol];
-        if (input.value.toUpperCase() === expected) {
-          input.classList.remove('error');
-          input.classList.add('correct');
-        } else {
-          input.classList.remove('correct');
-          input.classList.add('error');
-          allCorrect = false;
-        }
-      });
+  document.getElementById('inputOgham').addEventListener('input', () => {
+    document.getElementById('outputEnglish').value = translateFromOgham(document.getElementById('inputOgham').value);
+  });
 
-      const errorMsg = document.getElementById('error');
-      if (allCorrect) {
-        document.getElementById('translator').style.display = 'block';
-        document.getElementById('challenge').style.display = 'none';
-        errorMsg.style.display = 'none';
-      } else {
-        errorMsg.style.display = 'block';
-      }
-    }
-  </script>
+  // Translators:
+  function translateToOgham(text) {
+    return text.split('').map(c => oghamMap[c.toUpperCase()] || c).join('');
+  }
+
+  function translateFromOgham(text) {
+    return text.split('').map(c => reverseMap[c] || c).join('');
+  }
+</script>
 </body>
 </html>
