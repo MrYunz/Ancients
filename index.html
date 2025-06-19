@@ -560,9 +560,9 @@
       });
     }
 
-    // Cooldown
+    // Cooldown timer time
     function startCooldown() {
-      lockUntil = Date.now() + 60000;
+      lockUntil = Date.now() + 30 * 60 * 1000;
       attemptReset();
       tickCooldown();
     }
