@@ -7,18 +7,20 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-    /* --- GLOBAL --- */
-    *, *::before, *::after { box-sizing: border-box; }
+    /* Reset & box‑sizing */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       background: #0a0a0a;
       color: #e0c097;
       font-family: 'Press Start 2P', monospace;
-      margin: 0;
-      padding: 2rem 1rem;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      text-align: center;
     }
 
     h1 {
@@ -28,21 +30,18 @@
       user-select: text;
     }
 
-    /* --- CHALLENGE CONTAINER --- */
+    /* Challenge container centered */
     #challenge {
-      display: flex;
-      flex-direction: column;
-      align-items: center;        /* center grid + button */
       width: 100%;
-      max-width: 520px;           /* no wider than this */
-      margin-bottom: 2rem;
+      max-width: 360px;
     }
 
     .alphabet-grid {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 0.5em;
       width: 100%;
+      margin-bottom: 1rem;
     }
 
     .alphabet-grid input {
@@ -54,7 +53,7 @@
       text-align: center;
       height: 3.5rem;
       text-shadow: 0 0 4px #ff9533;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
     .alphabet-grid input::placeholder {
       color: #b07d4f;
@@ -72,7 +71,6 @@
     }
 
     button {
-      margin-top: 1.5rem;
       padding: 0.8em 2em;
       font-family: 'Press Start 2P', monospace;
       font-size: 1rem;
@@ -82,7 +80,7 @@
       border-radius: 6px;
       cursor: pointer;
       text-shadow: 0 0 4px #b07d4f;
-      transition: background-color 0.2s ease, color 0.2s ease;
+      transition: background-color 0.2s, color 0.2s;
       letter-spacing: 1px;
     }
     button:hover {
@@ -95,22 +93,21 @@
       color: #e05a00;
       margin-top: 1rem;
       display: none;
-      font-family: monospace;
       letter-spacing: 1px;
     }
 
-    /* --- TRANSLATOR --- */
+    /* Translator section also centered */
     #translator {
       display: none;
       width: 100%;
-      max-width: 600px;
+      max-width: 360px;
+      margin-top: 2rem;
     }
     label {
       color: #ffd27f;
       display: block;
       margin-top: 1.5rem;
       margin-bottom: 0.3rem;
-      font-weight: bold;
       letter-spacing: 1px;
     }
     textarea {
@@ -123,9 +120,8 @@
       border-radius: 6px;
       color: #e0c097;
       resize: vertical;
-      font-family: monospace;
       text-shadow: 0 0 4px #ff9533;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
     textarea:focus {
       border-color: #ffd27f;
@@ -136,23 +132,20 @@
     hr {
       border: none;
       border-top: 1px solid #553d24;
-      margin: 2em 0;
+      margin: 2rem 0;
     }
-
   </style>
 </head>
 <body>
 
   <h1>Yunz Lab</h1>
 
-  <!-- CHALLENGE PHASE -->
   <div id="challenge">
     <div class="alphabet-grid" id="oghamInputs"></div>
     <button onclick="checkAnswers()">UNLOCK</button>
     <p id="error">Incorrect. Try again.</p>
   </div>
 
-  <!-- TRANSLATOR PHASE -->
   <div id="translator">
     <label for="inputEnglish">English → Ogham</label>
     <textarea id="inputEnglish" placeholder="Type English text..."></textarea>
@@ -166,7 +159,6 @@
   </div>
 
   <script>
-    // Ogham maps
     const oghamMap = {
       'A':'ᚁ','B':'ᚂ','C':'ᚃ','D':'ᚄ','E':'ᚅ',
       'F':'ᚆ','G':'ᚇ','H':'ᚈ','I':'ᚉ','J':'ᚊ',
@@ -177,7 +169,7 @@
     const reverseMap = {};
     for (let k in oghamMap) reverseMap[oghamMap[k]] = k;
 
-    // A fixed scrambled order:
+    // Fixed scrambled order
     const scrambled = [
       ['R',oghamMap.R],['G',oghamMap.G],['T',oghamMap.T],
       ['K',oghamMap.K],['B',oghamMap.B],['P',oghamMap.P],
@@ -203,7 +195,7 @@
       });
     }
 
-    // Check-and-unlock
+    // Check answers & unlock
     function checkAnswers(){
       let allOK = true;
       document.querySelectorAll('#oghamInputs input').forEach(inp=>{
@@ -239,9 +231,9 @@
       document.getElementById('outputEnglish').value = decodeOgham(e.target.value);
     });
 
-    // On load: build or skip
+    // On load
     window.addEventListener('DOMContentLoaded',()=>{
-      if (localStorage.getItem('oghamUnlocked')) {
+      if (localStorage.getItem('oghamUnlocked')){
         document.getElementById('challenge').style.display='none';
         document.getElementById('translator').style.display='block';
       } else {
