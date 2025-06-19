@@ -1,104 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Custom Ogham Cipher Translator</title>
-<style>
-  body {
-    background: #121212;
-    color: #eee;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 2em;
-  }
-  h1 {
-    text-align: center;
-  }
-  textarea {
-    width: 100%;
-    height: 120px;
-    font-size: 1.1em;
-    padding: 0.5em;
-    background: #222;
-    border: none;
-    border-radius: 5px;
-    color: #eee;
-    resize: vertical;
-    box-sizing: border-box;
-  }
-  label {
-    display: block;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-    font-weight: bold;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yunz Lab</title>
+  <style>
+    body {
+      background: #121212;
+      color: #eee;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 2em;
+    }
+    h1 {
+      text-align: center;
+    }
+    textarea, input {
+      width: 100%;
+      font-size: 1em;
+      padding: 0.5em;
+      background: #222;
+      border: none;
+      border-radius: 5px;
+      color: #eee;
+      margin-bottom: 1em;
+      box-sizing: border-box;
+    }
+    label {
+      margin-top: 1em;
+      display: block;
+      font-weight: bold;
+    }
+    .section {
+      display: none;
+    }
+    .alphabet-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0.5em;
+    }
+    .correct {
+      border: 2px solid #0f0;
+    }
+    .error {
+      border: 2px solid #f00;
+    }
+  </style>
 </head>
 <body>
 
-<h1>Custom Ogham Cipher Translator</h1>
+  <h1>Yunz Lab</h1>
 
-<label for="inputEnglish">Type English text here:</label>
-<textarea id="inputEnglish" placeholder="Type English text here..."></textarea>
+  <div id="challenge">
+    <p><strong>Enter the English letter for each symbol to prove you understand the Ogham:</strong></p>
+    <div class="alphabet-grid" id="oghamInputs"></div>
+    <button onclick="checkAnswers()">Unlock Translator</button>
+    <p id="error" style="color: #f66; display:none;">Incorrect. Try again.</p>
+  </div>
 
-<label for="outputOgham">Ogham cipher output:</label>
-<textarea id="outputOgham" readonly placeholder="Ogham cipher output will appear here..."></textarea>
+  <div id="translator" class="section">
+    <label for="inputEnglish">English to Ogham:</label>
+    <textarea id="inputEnglish" placeholder="Type English text here..."></textarea>
+    <textarea id="outputOgham" readonly placeholder="Ogham cipher output will appear here..."></textarea>
 
-<hr style="margin:2em 0; border: none; border-top: 1px solid #444;" />
+    <hr style="margin:2em 0; border: none; border-top: 1px solid #444;" />
 
-<label for="inputOgham">Type Ogham cipher text here:</label>
-<textarea id="inputOgham" placeholder="Type Ogham text here..."></textarea>
+    <label for="inputOgham">Ogham to English:</label>
+    <textarea id="inputOgham" placeholder="Type Ogham text here..."></textarea>
+    <textarea id="outputEnglish" readonly placeholder="English output will appear here..."></textarea>
+  </div>
 
-<label for="outputEnglish">English output:</label>
-<textarea id="outputEnglish" readonly placeholder="English output will appear here..."></textarea>
+  <script>
+    const oghamMap = {
+      'A': 'ᚁ', 'B': 'ᚂ', 'C': 'ᚃ', 'D': 'ᚄ', 'E': 'ᚅ',
+      'F': 'ᚆ', 'G': 'ᚇ', 'H': 'ᚈ', 'I': 'ᚉ', 'J': 'ᚊ',
+      'K': 'ᚋ', 'L': 'ᚌ', 'M': 'ᚍ', 'N': 'ᚎ', 'O': 'ᚏ',
+      'P': 'ᚐ', 'Q': 'ᚑ', 'R': 'ᚒ', 'S': 'ᚓ', 'T': 'ᚔ',
+      'U': 'ᚕ', 'V': 'ᚖ', 'W': 'ᚗ', 'X': 'ᚘ', 'Y': 'ᚙ', 'Z': '᚜'
+    };
 
-<script>
-// Map for English to Ogham
-const oghamMap = {
-  'A': 'ᚁ', 'B': 'ᚂ', 'C': 'ᚃ', 'D': 'ᚄ', 'E': 'ᚅ',
-  'F': 'ᚆ', 'G': 'ᚇ', 'H': 'ᚈ', 'I': 'ᚉ', 'J': 'ᚊ',
-  'K': 'ᚋ', 'L': 'ᚌ', 'M': 'ᚍ', 'N': 'ᚎ', 'O': 'ᚏ',
-  'P': 'ᚐ', 'Q': 'ᚑ', 'R': 'ᚒ', 'S': 'ᚓ', 'T': 'ᚔ',
-  'U': 'ᚕ', 'V': 'ᚖ', 'W': 'ᚗ', 'X': 'ᚘ', 'Y': 'ᚙ',
-  'Z': '᚜'
-};
+    const reverseMap = {};
+    for (let key in oghamMap) reverseMap[oghamMap[key]] = key;
 
-// Create reverse map for Ogham to English
-const reverseOghamMap = {};
-for (const [key, value] of Object.entries(oghamMap)) {
-  reverseOghamMap[value] = key;
-}
+    function translateToOgham(text) {
+      return text.split('').map(c => oghamMap[c.toUpperCase()] || c).join('');
+    }
 
-// Encode English to Ogham
-function encodeToOgham(text) {
-  return text.split('').map(c => {
-    const up = c.toUpperCase();
-    return oghamMap[up] || c;
-  }).join('');
-}
+    function translateFromOgham(text) {
+      return text.split('').map(c => reverseMap[c] || c).join('');
+    }
 
-// Decode Ogham to English
-function decodeFromOgham(text) {
-  return text.split('').map(c => {
-    return reverseOghamMap[c] || c;
-  }).join('');
-}
+    document.getElementById('inputEnglish').addEventListener('input', () => {
+      document.getElementById('outputOgham').value = translateToOgham(document.getElementById('inputEnglish').value);
+    });
 
-// DOM Elements
-const inputEnglish = document.getElementById('inputEnglish');
-const outputOgham = document.getElementById('outputOgham');
-const inputOgham = document.getElementById('inputOgham');
-const outputEnglish = document.getElementById('outputEnglish');
+    document.getElementById('inputOgham').addEventListener('input', () => {
+      document.getElementById('outputEnglish').value = translateFromOgham(document.getElementById('inputOgham').value);
+    });
 
-// Event Listeners for live translation
-inputEnglish.addEventListener('input', () => {
-  outputOgham.value = encodeToOgham(inputEnglish.value);
-});
+    // Create the challenge grid
+    const oghamInputs = document.getElementById('oghamInputs');
+    const correctAnswers = Object.entries(oghamMap);
+    correctAnswers.forEach(([letter, symbol]) => {
+      const input = document.createElement('input');
+      input.dataset.symbol = symbol;
+      input.placeholder = symbol;
+      input.maxLength = 1;
+      oghamInputs.appendChild(input);
+    });
 
-inputOgham.addEventListener('input', () => {
-  outputEnglish.value = decodeFromOgham(inputOgham.value);
-});
-</script>
+    function checkAnswers() {
+      const inputs = oghamInputs.querySelectorAll('input');
+      let allCorrect = true;
+      inputs.forEach(input => {
+        const expected = reverseMap[input.dataset.symbol];
+        if (input.value.toUpperCase() === expected) {
+          input.classList.remove('error');
+          input.classList.add('correct');
+        } else {
+          input.classList.remove('correct');
+          input.classList.add('error');
+          allCorrect = false;
+        }
+      });
 
+      if (allCorrect) {
+        document.getElementById('translator').style.display = 'block';
+        document.getElementById('challenge').style.display = 'none';
+      } else {
+        document.getElementById('error').style.display = 'block';
+      }
+    }
+  </script>
 </body>
 </html>
