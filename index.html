@@ -5,477 +5,155 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Yunz Lab</title>
   <style>
-    @keyframes glitchShake {   /* glitch effect on wrong answer */
-    0%   { transform: translate(0, 0) }
-    20%  { transform: translate(-5px, 0) }
-    40%  { transform: translate(5px, 0) }
-    60%  { transform: translate(-5px, 0) }
-    80%  { transform: translate(5px, 0) }
-    100% { transform: translate(0, 0) }
-  }
-  .glitch {
-    animation: glitchShake 0.4s ease-in-out;
-    }
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap');
 
-
-    document.addEventListener('keydown', function(e) {
-    // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-    if (
-    e.key === 'F12' ||
-    (e.ctrlKey && e.shiftKey && ['I','J'].includes(e.key.toUpperCase())) ||
-    (e.ctrlKey && e.key.toUpperCase() === 'U')
-    ) {
-    e.preventDefault();
-    }
-    });
-    /* Reset & box‑sizing */
+    /* Reset & box sizing */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-   
+    html, body { height: 100%; }
     body {
       background: #0a0a0a;
       color: #e0c097;
       font-family: 'Press Start 2P', monospace;
-      font-size: 8px;
-      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 1rem;
-      background-image: 
-        repeating-linear-gradient(0deg, #0a0a0a 0px, #111111 1px, #0a0a0a 2px),
-        repeating-linear-gradient(90deg, #0a0a0a 0px, #111111 1px, #0a0a0a 2px);
-      background-size: 4px 4px;
-      position: relative;
-      image-rendering: pixelated;
-      image-rendering: -moz-crisp-edges;
-      image-rendering: crisp-edges;
+      text-align: center;
+      user-select: none;
     }
 
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        repeating-linear-gradient(45deg, transparent 0px, transparent 7px, rgba(255, 179, 71, 0.05) 8px, rgba(255, 179, 71, 0.05) 9px);
-      pointer-events: none;
-    }
-
-    /* Centered container */
     .container {
       width: 100%;
-      max-width: 420px;
-      text-align: center;
-      z-index: 1;
-      position: relative;
+      max-width: 360px;
     }
 
     h1 {
-      color: #ffb347;
-      text-shadow: 
-        4px 4px 0px #331f12,
-        0 0 8px #ff9533;
-      margin-bottom: 3rem;
-      user-select: text;
-      font-size: 32px;
       font-family: 'Orbitron', monospace;
       font-weight: 900;
+      font-size: 32px;
       letter-spacing: 4px;
-      animation: titlePulse 3s ease-in-out infinite alternate;
-      image-rendering: pixelated;
-      text-transform: uppercase;
-    }
-
-    @keyframes titlePulse {
-      from { text-shadow: 4px 4px 0px #331f12, 0 0 8px #ff9533; }
-      to { text-shadow: 4px 4px 0px #331f12, 0 0 16px #ff9533; }
-    }
-
-    /* Challenge */
-    #challenge {
+      color: #ffb347;
+      text-shadow: 4px 4px 0 #331f12, 0 0 8px #ff9533;
       margin-bottom: 2rem;
+      animation: titlePulse 3s ease-in-out infinite alternate;
+    }
+    @keyframes titlePulse {
+      from { text-shadow: 4px 4px 0 #331f12, 0 0 8px #ff9533; }
+      to   { text-shadow: 4px 4px 0 #331f12, 0 0 16px #ff9533; }
     }
 
-    .challenge-intro {
-      display: none;
-    }
-
+    #challenge { margin-bottom: 2rem; }
     .alphabet-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 8px;
+      margin: 0 auto 1rem;
       width: 100%;
-      margin: 0 auto 2rem auto;
-      max-width: 360px;
-      padding: 16px;
-      background: 
-        repeating-linear-gradient(0deg, #221a0d 0px, #221a0d 1px, #1a140a 1px, #1a140a 2px),
-        repeating-linear-gradient(90deg, #221a0d 0px, #221a0d 1px, #1a140a 1px, #1a140a 2px);
-      border: 2px solid #553d24;
-      border-radius: 0;
-      box-shadow: 
-        inset 2px 2px 0px #000000,
-        inset -2px -2px 0px #775533,
-        0 0 0 2px #331f12;
-      image-rendering: pixelated;
     }
-
     .alphabet-grid input {
-      background: 
-        repeating-linear-gradient(0deg, #221a0d 0px, #221a0d 1px, #1a140a 1px, #1a140a 2px),
-        repeating-linear-gradient(90deg, #221a0d 0px, #221a0d 1px, #1a140a 1px, #1a140a 2px);
+      background: #221a0d;
       border: 2px solid #553d24;
-      border-radius: 0;
       color: #e0c097;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 12px;
+      font-family: 'Press Start 2P';
+      font-size: 16px;
       text-align: center;
       height: 50px;
-      width: 100%;
-      text-shadow: 1px 1px 0px #000000;
-      transition: all 0.2s steps(4);
-      letter-spacing: 0;
-      box-shadow: 
-        inset 2px 2px 0px #000000,
-        inset -1px -1px 0px #443322;
-      image-rendering: pixelated;
+      text-shadow: 1px 1px 0 #000;
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
-
     .alphabet-grid input::placeholder {
       color: #ffb347;
-      text-shadow: 1px 1px 0px #000000;
       font-size: 24px;
+      text-shadow: 1px 1px 0 #000;
     }
-
-    .alphabet-grid input:focus {
-      border-color: #ffd27f;
-      box-shadow: 
-        inset 2px 2px 0px #000000,
-        inset -1px -1px 0px #443322,
-        0 0 0 2px #ffd27f;
-      outline: none;
-      background: 
-        repeating-linear-gradient(0deg, #3b2a1c 0px, #3b2a1c 1px, #2d1f13 1px, #2d1f13 2px),
-        repeating-linear-gradient(90deg, #3b2a1c 0px, #3b2a1c 1px, #2d1f13 1px, #2d1f13 2px);
-    }
-
     .alphabet-grid input.correct {
       border-color: #ffd27f;
-      box-shadow: 
-        inset 2px 2px 0px #000000,
-        inset -1px -1px 0px #443322,
-        0 0 0 2px #ffd27f,
-        0 0 8px #ffd27f;
-      background: 
-        repeating-linear-gradient(0deg, #3b2a1c 0px, #3b2a1c 1px, #2d1f13 1px, #2d1f13 2px),
-        repeating-linear-gradient(90deg, #3b2a1c 0px, #3b2a1c 1px, #2d1f13 1px, #2d1f13 2px);
-      animation: correctBlink 0.6s steps(2) 2;
+      box-shadow: 0 0 6px #ffd27f;
+      background: #3b2a1c;
     }
-
     .alphabet-grid input.error {
       border-color: #e05a00;
-      box-shadow: 
-        inset 2px 2px 0px #000000,
-        inset -1px -1px 0px #443322,
-        0 0 0 2px #e05a00,
-        0 0 8px #e05a00;
-      background: 
-        repeating-linear-gradient(0deg, #331f12 0px, #331f12 1px, #2a1a0f 1px, #2a1a0f 2px),
-        repeating-linear-gradient(90deg, #331f12 0px, #331f12 1px, #2a1a0f 1px, #2a1a0f 2px);
-      animation: errorBlink 0.4s steps(2) 3;
+      box-shadow: 0 0 6px #e05a00;
+      background: #331f12;
     }
-
-    @keyframes correctBlink {
-      0%, 50% { opacity: 1; }
-      25%, 75% { opacity: 0.7; }
+    @keyframes glitchShake {
+      0% { transform: translate(0,0); }
+      20% { transform: translate(-5px,0); }
+      40% { transform: translate(5px,0); }
+      60% { transform: translate(-5px,0); }
+      80% { transform: translate(5px,0); }
+      100% { transform: translate(0,0); }
     }
-
-    @keyframes errorBlink {
-      0%, 50% { opacity: 1; }
-      25%, 75% { opacity: 0.5; }
-    }
+    .glitch { animation: glitchShake 0.4s ease-in-out; }
 
     button {
       padding: 12px 24px;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 10px;
-      color: #331f12;
-      background: 
-        repeating-linear-gradient(0deg, #ffd27f 0px, #ffd27f 1px, #ffb347 1px, #ffb347 2px),
-        repeating-linear-gradient(90deg, #ffd27f 0px, #ffd27f 1px, #ffb347 1px, #ffb347 2px);
+      font-family: 'Press Start 2P';
+      font-size: 14px;
+      background: #ffd27f;
       border: 2px solid #e05a00;
-      border-radius: 0;
+      color: #331f12;
       cursor: pointer;
-      text-shadow: 1px 1px 0px #000000;
-      transition: all 0.1s steps(2);
-      letter-spacing: 1px;
-      box-shadow: 
-        inset 2px 2px 0px #ffffff,
-        inset -2px -2px 0px #cc4f00,
-        2px 2px 0px #000000;
-      position: relative;
-      image-rendering: pixelated;
+      transition: background 0.2s, color 0.2s;
     }
-
-    button:hover {
-      background: 
-        repeating-linear-gradient(0deg, #e05a00 0px, #e05a00 1px, #cc4f00 1px, #cc4f00 2px),
-        repeating-linear-gradient(90deg, #e05a00 0px, #e05a00 1px, #cc4f00 1px, #cc4f00 2px);
-      color: #ffd27f;
-      text-shadow: 1px 1px 0px #000000;
-      box-shadow: 
-        inset 2px 2px 0px #ff6b1a,
-        inset -2px -2px 0px #aa4400,
-        2px 2px 0px #000000;
-    }
-
-    button:active {
-      box-shadow: 
-        inset 2px 2px 0px #aa4400,
-        inset -2px -2px 0px #ff6b1a,
-        1px 1px 0px #000000;
-      transform: translate(1px, 1px);
-    }
+    button:hover { background: #e05a00; color: #ffd27f; }
 
     #error {
       color: #e05a00;
-      margin-top: 1.5rem;
-      display: none;
-      letter-spacing: 1px;
-      font-size: 8px;
-      text-shadow: 1px 1px 0px #000000;
-      animation: errorBlink 0.5s steps(2) infinite;
-    }
-
-    @keyframes errorBlink {
-      0%, 50% { opacity: 1; }
-      25%, 75% { opacity: 0.5; }
-    }
-
-    /* Translator */
-    #translator {
+      margin-top: 1rem;
       display: none;
     }
 
-    .translator-intro {
-      color: #ffd27f;
-      font-size: 0.7rem;
-      margin-bottom: 2rem;
-      line-height: 1.4;
-      letter-spacing: 1px;
-      text-shadow: 0 0 8px #ff9533;
-    }
-
-    label {
-      color: #ffd27f;
-      display: block;
-      margin-top: 2rem;
-      margin-bottom: 0.8rem;
-      letter-spacing: 1px;
-      font-size: 0.8rem;
-      text-shadow: 0 0 6px #ff9533;
-    }
-
+    #translator { display: none; }
+    label { color: #ffd27f; margin-top:1.5rem; display:block; }
     textarea {
-      width: 100%;
-      height: 120px;
-      font-size: 0.8rem;
-      font-family: 'Press Start 2P', monospace;
-      padding: 1rem;
-      background: linear-gradient(135deg, #221a0d, #1a140a);
-      border: 2px solid #553d24;
-      border-radius: 8px;
-      color: #e0c097;
-      resize: vertical;
-      text-shadow: 0 0 4px #ff9533;
-      transition: all 0.3s ease;
-      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
-      line-height: 1.4;
+      width:100%; height:100px;
+      background:#221a0d;
+      border:2px solid #553d24;
+      color:#e0c097;
+      padding:0.6em;
+      font-family:'Press Start 2P';
+      text-shadow:0 0 4px #ff9533;
+      transition:border-color 0.2s, box-shadow 0.2s;
     }
-
-    textarea::placeholder {
-      color: #b07d4f;
-      text-shadow: none;
-    }
-
-    textarea:focus {
-      border-color: #ffd27f;
-      box-shadow: 
-        0 0 12px #ffd27f,
-        inset 0 2px 6px rgba(0, 0, 0, 0.5);
-      outline: none;
-      background: linear-gradient(135deg, #3b2a1c, #2d1f13);
-    }
-
-    textarea[readonly] {
-      background: linear-gradient(135deg, #1a140a, #221a0d);
-      color: #ffb347;
-      cursor: default;
-    }
-
-    hr {
-      border: none;
-      border-top: 2px solid #553d24;
-      margin: 3rem 0;
-      box-shadow: 0 1px 2px rgba(255, 179, 71, 0.2);
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 480px) {
-      .container {
-        max-width: 340px;
-      }
-      
-      .alphabet-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.6rem;
-        padding: 0.8rem;
-      }
-      
-      h1 {
-        font-size: 1.4rem;
-        margin-bottom: 2rem;
-      }
-      
-      button {
-        padding: 0.8rem 2rem;
-        font-size: 0.8rem;
-      }
-    }
+    hr { border:none; border-top:2px solid #553d24; margin:2rem 0; }
   </style>
 </head>
-<body>
-  <body oncontextmenu="return false;"> 
-  <audio autoplay loop volume="0.8">
-  <source src="WastlandsByKolekutbeatz.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
-  </audio>
-  <div class="container">
+<body oncontextmenu="return false;">
+  <div class="container" id="challenge">
     <h1>YUNZ LAB</h1>
-
-    <div id="challenge">
-      <p class="challenge-intro">
-        DECIPHER THE ANCIENT SYMBOLS TO UNLOCK THE TRANSLATOR
-      </p>
-      <div class="alphabet-grid" id="oghamInputs"></div>
-      <button onclick="checkAnswers()">UNLOCK SECRETS</button>
-      <p id="error">THE SYMBOLS REJECT YOUR ATTEMPT...</p>
-    </div>
-
-    <div id="translator">
-      <p class="translator-intro">
-        THE ANCIENT KNOWLEDGE IS NOW YOURS TO COMMAND
-      </p>
-      
-      <label for="inputEnglish">ENCODE MESSAGE</label>
-      <textarea id="inputEnglish" placeholder="Enter your message..."></textarea>
-      <textarea id="outputOgham" readonly placeholder="Ancient symbols will appear here..."></textarea>
-      
-      <hr />
-      
-      <label for="inputOgham">DECODE ANCIENT TEXT</label>
-      <textarea id="inputOgham" placeholder="Paste ancient symbols here..."></textarea>
-      <textarea id="outputEnglish" readonly placeholder="Translation will appear here..."></textarea>
-    </div>
+    <div class="alphabet-grid" id="oghamInputs"></div>
+    <button onclick="checkAnswers()">UNLOCK</button>
+    <p id="error">Incorrect. Try again.</p>
   </div>
-
+  <div class="container" id="translator">
+    <label for="inputEnglish">ENCODE</label>
+    <textarea id="inputEnglish" placeholder="Type..." ></textarea>
+    <textarea id="outputOgham" readonly placeholder="Symbols..."></textarea>
+    <hr />
+    <label for="inputOgham">DECODE</label>
+    <textarea id="inputOgham" placeholder="Paste..." ></textarea>
+    <textarea id="outputEnglish" readonly placeholder="Text..."></textarea>
+  </div>
   <script>
-    const oghamMap = {
-      'A':'ᚁ','B':'ᚂ','C':'ᚃ','D':'ᚄ','E':'ᚅ',
-      'F':'ᚆ','G':'ᚇ','H':'ᚈ','I':'ᚉ','J':'ᚊ',
-      'K':'ᚋ','L':'ᚌ','M':'ᚍ','N':'ᚎ','O':'ᚏ',
-      'P':'ᚐ','Q':'ᚑ','R':'ᚒ','S':'ᚓ','T':'ᚔ',
-      'U':'ᚕ','V':'ᚖ','W':'ᚗ','X':'ᚘ','Y':'ᚙ','Z':'᚜'
-    };
-    const reverseMap = {};
-    for (let k in oghamMap) reverseMap[oghamMap[k]] = k;
-
-    const scrambled = [
-      ['R',oghamMap.R],['G',oghamMap.G],['T',oghamMap.T],
-      ['K',oghamMap.K],['B',oghamMap.B],['P',oghamMap.P],
-      ['X',oghamMap.X],['L',oghamMap.L],['N',oghamMap.N],
-      ['H',oghamMap.H],['J',oghamMap.J],['S',oghamMap.S],
-      ['E',oghamMap.E],['Y',oghamMap.Y],['A',oghamMap.A],
-      ['W',oghamMap.W],['M',oghamMap.M],['Z',oghamMap.Z],
-      ['O',oghamMap.O],['C',oghamMap.C],['Q',oghamMap.Q],
-      ['F',oghamMap.F],['U',oghamMap.U],['V',oghamMap.V],
-      ['I',oghamMap.I],['D',oghamMap.D]
-    ];
-
-    function buildInputs(){
-      const c = document.getElementById('oghamInputs');
-      c.innerHTML = '';
-      scrambled.forEach(([l,s])=>{
-        let i = document.createElement('input');
-        i.dataset.symbol = s;
-        i.placeholder = s;
-        i.maxLength = 1;
-        i.addEventListener('input', function() {
-          this.value = this.value.toUpperCase();
-        });
-        c.appendChild(i);
-      });
+    const oghamMap={A:'ᚁ',B:'ᚂ',C:'ᚃ',D:'ᚄ',E:'ᚅ',F:'ᚆ',G:'ᚇ',H:'ᚈ',I:'ᚉ',J:'ᚊ',K:'ᚋ',L:'ᚌ',M:'ᚍ',N:'ᚎ',O:'ᚏ',P:'ᚐ',Q:'ᚑ',R:'ᚒ',S:'ᚓ',T:'ᚔ',U:'ᚕ',V:'ᚖ',W:'ᚗ',X:'ᚘ',Y:'ᚙ',Z:'᚜'};
+    const reverseMap={};for(let k in oghamMap)reverseMap[oghamMap[k]]=k;
+    const scrambled=[['R',oghamMap.R],['G',oghamMap.G],['T',oghamMap.T],['K',oghamMap.K],['B',oghamMap.B],['P',oghamMap.P],['X',oghamMap.X],['L',oghamMap.L],['N',oghamMap.N],['H',oghamMap.H],['J',oghamMap.J],['S',oghamMap.S],['E',oghamMap.E],['Y',oghamMap.Y],['A',oghamMap.A],['W',oghamMap.W],['M',oghamMap.M],['Z',oghamMap.Z],['O',oghamMap.O],['C',oghamMap.C],['Q',oghamMap.Q],['F',oghamMap.F],['U',oghamMap.U],['V',oghamMap.V],['I',oghamMap.I],['D',oghamMap.D]];
+    let attempts=0;
+    function buildInputs(){const c=document.getElementById('oghamInputs');c.innerHTML='';scrambled.forEach(([l,s])=>{let i=document.createElement('input');i.dataset.symbol=s;i.placeholder=s;i.maxLength=1;i.addEventListener('input',()=>i.value=i.value.toUpperCase());c.appendChild(i);});}
+    function resetChallenge(){attempts=0;const inputs=document.querySelectorAll('#oghamInputs input');inputs.forEach(i=>{i.value='';i.classList.remove('correct','error');});}
+    function checkAnswers(){let allOK=true;document.getElementById('error').style.display='none';const inputs=document.querySelectorAll('#oghamInputs input');inputs.forEach(i=>{if(i.value===reverseMap[i.dataset.symbol])i.classList.add('correct');else{allOK=false;i.classList.add('error');}});
+      if(allOK){document.getElementById('challenge').style.display='none';document.getElementById('translator').style.display='block';}
+      else{attempts++;document.getElementById('challenge').classList.add('glitch');setTimeout(()=>document.getElementById('challenge').classList.remove('glitch'),400);
+        if(attempts>=3){resetChallenge();}
+        else{document.getElementById('error').style.display='block';}}
     }
-
-    function checkAnswers(){
-      let ok = true;
-      let correctCount = 0;
-      const inputs = document.querySelectorAll('#oghamInputs input');
-      const challenge = document.getElementById('challenge');
-      // trigger glitch
-      challenge.classList.add('glitch');
-      setTimeout(() => challenge.classList.remove('glitch'), 400);
-      
-      inputs.forEach(i=>{
-        if ((i.value.toUpperCase()||'') === reverseMap[i.dataset.symbol]){
-          i.classList.add('correct'); 
-          i.classList.remove('error');
-          correctCount++;
-        } else {
-          i.classList.add('error'); 
-          i.classList.remove('correct');
-          ok = false;
-        }
-      });
-      
-      if (ok){
-        // Success - unlock translator
-        document.getElementById('challenge').style.display='none';
-        document.getElementById('translator').style.display='block';
-        // Note: localStorage removed as per artifact restrictions
-      } else {
-        document.getElementById('error').style.display='block';
-        setTimeout(() => {
-          document.getElementById('error').style.display='none';
-        }, 3000);
-      }
-    }
-
-    function encodeOgham(t){ 
-      return t.split('').map(c=>oghamMap[c.toUpperCase()]||c).join(''); 
-    }
-    
-    function decodeOgham(t){ 
-      return t.split('').map(c=>reverseMap[c]||c).join(''); 
-    }
-
-    document.getElementById('inputEnglish')
-      .addEventListener('input',e=> {
-        document.getElementById('outputOgham').value = encodeOgham(e.target.value);
-      });
-      
-    document.getElementById('inputOgham')
-      .addEventListener('input',e=> {
-        document.getElementById('outputEnglish').value = decodeOgham(e.target.value);
-      });
-
-    window.addEventListener('DOMContentLoaded',()=>{
-      buildInputs();
-    });
+    function encodeOgham(t){return t.split('').map(c=>oghamMap[c.toUpperCase()]||c).join('');}
+    function decodeOgham(t){return t.split('').map(c=>reverseMap[c]||c).join('');}
+    document.getElementById('inputEnglish').addEventListener('input',e=>document.getElementById('outputOgham').value=encodeOgham(e.target.value));
+    document.getElementById('inputOgham').addEventListener('input',e=>document.getElementById('outputEnglish').value=decodeOgham(e.target.value));
+    window.addEventListener('DOMContentLoaded',buildInputs);
   </script>
 </body>
 </html>
