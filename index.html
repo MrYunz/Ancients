@@ -18,9 +18,7 @@
       align-items:center;
       justify-content:center;
       padding:1rem;
-      background-image:
-        repeating-linear-gradient(0deg,#0a0a0a 0, #111 1px, #0a0a0a 2px),
-        repeating-linear-gradient(90deg,#0a0a0a 0, #111 1px, #0a0a0a 2px);
+      background-image:repeating-linear-gradient(0deg,#0a0a0a 0, #111 1px, #0a0a0a 2px),repeating-linear-gradient(90deg,#0a0a0a 0, #111 1px, #0a0a0a 2px);
       background-size:4px 4px;
       position:relative;
       user-select:none;
@@ -37,43 +35,68 @@
       animation:titlePulse 3s ease-in-out infinite alternate;
     }
     @keyframes titlePulse { from{text-shadow:4px 4px 0 #331f12,0 0 8px #ff9533;}to{text-shadow:4px 4px 0 #331f12,0 0 16px #ff9533;} }
-    .audio-control { position:absolute; top:1rem; right:1rem; display:flex; align-items:center; gap:0.5rem; }
-    .audio-control svg { width:24px;height:24px;fill:#ffd27f;cursor:pointer;transition:fill 0.2s; }
+    /* Audio Controls */
+    .audio-control { position:absolute; top:1rem; right:1rem; display:flex; flex-direction:column; align-items:flex-end; }
+    .audio-control svg { width:24px; height:24px; fill:#ffd27f; cursor:pointer; transition:fill 0.2s; }
     .audio-control svg:hover { fill:#ffb347; }
-    .audio-slider { width:100px; }
-    .audio-slider::-webkit-slider-thumb{appearance:none;width:12px;height:12px;background:#e05a00;border-radius:50%;cursor:pointer;}
-    .audio-slider::-webkit-slider-runnable-track{height:4px;background:#553d24;border-radius:2px;}
+    .audio-slider {
+      display:none;
+      margin-top:4px;
+      width:80px;
+      height:12px;
+      background:#553d24;
+      outline:2px solid #331f12;
+      outline-offset:-2px;
+    }
+    .audio-slider::-webkit-slider-runnable-track {
+      height:12px;
+      background: #775533;
+    }
+    .audio-slider::-webkit-slider-thumb {
+      -webkit-appearance:none;
+      appearance:none;
+      width:12px;
+      height:12px;
+      background:#ffd27f;
+      border:2px solid #331f12;
+      cursor:pointer;
+      margin-top:0;
+    }
+    .audio-slider:focus { outline:none; }
+
+    /* Challenge */
     #challenge { margin-bottom:2rem; }
     .alphabet-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin:0 auto 1rem; width:fit-content; padding:16px; background:#221a0d; border:2px solid #553d24; box-shadow:inset 2px 2px 0 #000,inset -2px -2px 0 #775533,0 0 0 2px #331f12; }
-    .alphabet-grid input { background:#221a0d; border:2px solid #553d24; color:#e0c097; font-size:1.2rem; text-align:center; width:80px;height:50px; text-shadow:1px 1px 0 #000; transition:all 0.2s; }
+    .alphabet-grid input { background:#221a0d; border:2px solid #553d24; color:#e0c097; font-size:1.2rem; text-align:center; width:80px;height:50px; text-shadow:1px 1px 0 #000; transition:all 0.2s; box-shadow:inset 2px 2px 0 #000,inset -1px -1px 0 #443322; }
     .alphabet-grid input::placeholder{color:#ffb347;font-size:1.5rem;text-shadow:1px 1px 0 #000;}
     .alphabet-grid input.correct{border-color:#ffd27f;box-shadow:0 0 6px #ffd27f;background:#3b2a1c;}
     .alphabet-grid input.error{border-color:#e05a00;box-shadow:0 0 6px #e05a00;background:#331f12;}
     @keyframes glitch{0%,100%{transform:none;}20%,60%{transform:translateX(-5px);}40%,80%{transform:translateX(5px);}}
     .glitch{animation:glitch 0.4s ease-in-out;}
-    button{padding:12px 24px;font-size:1rem;background:#ffd27f;border:2px solid #e05a00;color:#331f12;cursor:pointer;box-shadow:2px 2px 0 #000;transition:background 0.2s;}
+
+    button{padding:12px 24px;font-size:1rem;background:#ffd27f;border:2px solid #e05a00;color:#331f12;cursor:pointer;box-shadow:2px 2px 0 #000;}
     button:hover{background:#e05a00;color:#ffd27f;}
     #error{color:#e05a00;margin-top:1rem;display:none;}
-    #cooldown{color:#ffb347;margin-top:1rem;display:none;}
+    #cooldown{color:#ffb347;margin-top:1rem; display:none;}
+
+    /* Translator */
     #translator{display:none;}
-    .reader-btn{margin-top:1rem;padding:10px 20px;font-size:1rem;background:#ffb347;border:none;color:#0a0a0a;cursor:pointer;}
-    label{color:#ffd27f;margin-top:1.5rem;display:block;}
-    textarea{width:100%;height:120px;background:linear-gradient(135deg,#221a0d,#1a140a);border:2px solid #553d24;color:#e0c097;padding:8px;font-size:1rem;text-shadow:0 0 4px #ff9533;}
+    .reader-btn{margin-bottom:1rem;padding:10px 20px;font-size:1rem;background:#ffb347;border:none;color:#0a0a0a;cursor:pointer;}
+    label{color:#ffd27f;margin-top:1.5rem;display:block;font-size:1rem;}
+    textarea{width:100%;height:120px;background:linear-gradient(135deg,#221a0d,#1a140a);border:2px solid #553d24;color:#e0c097;padding:8px;font-size:1rem;text-shadow:0 0 4px #ff9533;transition:all 0.3s;}
     textarea:focus{outline:none;border-color:#ffd27f;box-shadow:0 0 8px #ffd27f;background:linear-gradient(135deg,#3b2a1c,#2d1f13);}
     textarea[readonly]{background:linear-gradient(135deg,#1a140a,#221a0d);color:#ffb347;}
     hr{border:none;border-top:2px solid #553d24;margin:2rem 0;}
   </style>
 </head>
-<body oncontextmenu="return false;" onkeydown="if(event.key==='F12'||(event.ctrlKey&&event.shiftKey&&(event.key==='I'||event.key==='J'))|| (event.ctrlKey&&event.key==='U'))event.preventDefault();">
+<body oncontextmenu="return false;" onkeydown="if(event.key==='F12'||(event.ctrlKey&&event.shiftKey&&(event.key==='I'||event.key==='J'))||(event.ctrlKey&&event.key==='U'))event.preventDefault();">
   <div class="container">
     <h1>YUNZ LAB</h1>
     <div class="audio-control">
       <svg id="audioToggle" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg>
       <input id="volumeSlider" class="audio-slider" type="range" min="0" max="1" step="0.01" value="0.5">
     </div>
-    <audio id="bgAudio" loop>
-      <source src="WastlandsByKolekutbeatz.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bgAudio" loop><source src="WastlandsByKolekutbeatz.mp3" type="audio/mpeg"></audio>
     <div id="challenge">
       <div class="alphabet-grid" id="oghamInputs"></div>
       <button id="unlockBtn" onclick="checkAnswers()">UNLOCK</button>
@@ -94,20 +117,4 @@
   <script>
     const oghamMap={A:'ᚁ',B:'ᚂ',C:'ᚃ',D:'ᚄ',E:'ᚅ',F:'ᚆ',G:'ᚇ',H:'ᚈ',I:'ᚉ',J:'ᚊ',K:'ᚋ',L:'ᚌ',M:'ᚍ',N:'ᚎ',O:'ᚏ',P:'ᚐ',Q:'ᚑ',R:'ᚒ',S:'ᚓ',T:'ᚔ',U:'ᚕ',V:'ᚖ',W:'ᚗ',X:'ᚘ',Y:'ᚙ',Z:'᚜'};
     const reverseMap={};for(let k in oghamMap)reverseMap[oghamMap[k]]=k;
-    const scrambled=[['R',oghamMap.R],['G',oghamMap.G],['T',oghamMap.T],['K',oghamMap.K],['B',oghamMap.B],['P',oghamMap.P],['X',oghamMap.X],['L',oghamMap.L],['N',oghamMap.N],['H',oghamMap.H],['J',oghamMap.J],['S',oghamMap.S],['E',oghamMap.E],['Y',oghamMap.Y],['A',oghamMap.A],['W',oghamMap.W],['M',oghamMap.M],['Z',oghamMap.Z],['O',oghamMap.O],['C',oghamMap.C],['Q',oghamMap.Q],['F',oghamMap.F],['U',oghamMap.U],['V',oghamMap.V],['I',oghamMap.I],['D',oghamMap.D]];
-    let attempts=0, lockUntil=0;
-    const inputsContainer=document.getElementById('oghamInputs');
-    function buildInputs(){inputsContainer.innerHTML='';scrambled.forEach(([l,s])=>{let i=document.createElement('input');i.dataset.symbol=s;i.placeholder=s;i.maxLength=1;i.addEventListener('input',()=>i.value=i.value.toUpperCase());inputsContainer.appendChild(i);});}
-    function startCooldown(){lockUntil=Date.now()+60000;document.getElementById('challenge').classList.add('glitch');updateCooldown();}
-    function updateCooldown(){const cd=Date.now();if(cd<lockUntil){document.getElementById('cooldown').style.display='block';document.getElementById('unlockBtn').disabled=true;document.getElementById('cooldown').textContent='COOLDOWN: '+Math.ceil((lockUntil-cd)/1000)+'s';setTimeout(updateCooldown,500);}else{document.getElementById('cooldown').style.display='none';document.getElementById('unlockBtn').disabled=false;buildInputs();attempts=0;}}
-    function checkAnswers(){if(Date.now()<lockUntil)return;let ok=true;document.getElementById('error').style.display='none';document.querySelectorAll('#oghamInputs input').forEach(i=>{if(i.value!==reverseMap[i.dataset.symbol]){ok=false;i.classList.add('error');}else i.classList.remove('error');});if(ok){localStorage.setItem('unlocked','1');document.getElementById('challenge').style.display='none';document.getElementById('translator').style.display='block';}else{attempts++;if(attempts>=3){startCooldown();}else{document.getElementById('error').style.display='block';document.getElementById('challenge').classList.add('glitch');setTimeout(()=>document.getElementById('challenge').classList.remove('glitch'),400);} }}
-    function enterReader(){document.getElementById('challenge').style.display='none';document.getElementById('translator').style.display='block';}
-    function encodeOgham(t){return t.split('').map(c=>oghamMap[c.toUpperCase()]||c).join('');}
-    function decodeOgham(t){return t.split('').map(c=>reverseMap[c]||c).join('');}
-    document.getElementById('inputEnglish').addEventListener('input',e=>document.getElementById('outputOgham').value=encodeOgham(e.target.value));
-    document.getElementById('inputOgham').addEventListener('input',e=>document.getElementById('outputEnglish').value=decodeOgham(e.target.value));
-    // Audio
-    const bgAudio=document.getElementById('bgAudio'), toggle=document.getElementById('audioToggle'), slider=document.getElementById('volumeSlider');slider.addEventListener('input',e=>bgAudio.volume=e.target.value);toggle.addEventListener('click',()=>slider.style.display=slider.style.display==='block'?'none':'block');window.addEventListener('DOMContentLoaded',()=>{buildInputs();if(localStorage.getItem('unlocked'))enterReader();bgAudio.volume=slider.value;bgAudio.play().catch(()=>{});});
-  </script>
-</body>
-</html>
+    const scrambled=[['R',oghamMap.R],['G',oghamMap.G],['T',oghamMap.T],['K',oghamMap.K],['B',oghamMap.B],['P',oghamMap.P],['X',oghamMap.X],['L',oghamMap.L],['N',oghamMap.N],['H',oghamMap.H],['J',oghamMap.J],['S',oghamMap.S],['E',oghamMap.E],['Y',oghamMap.Y],['A',oghamMap.A],['W',oghamMap.W],['M',oghamMap.M],['Z',oghamMap.Z],['O',oghamMap.O],['C',oghamMap.C],['
