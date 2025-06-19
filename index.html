@@ -5,12 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Yunz Lab</title>
   <style>
+    @keyframes glitchShake {   /* glitch effect on wrong answer */
+    0%   { transform: translate(0, 0) }
+    20%  { transform: translate(-5px, 0) }
+    40%  { transform: translate(5px, 0) }
+    60%  { transform: translate(-5px, 0) }
+    80%  { transform: translate(5px, 0) }
+    100% { transform: translate(0, 0) }
+  }
+  .glitch {
+    animation: glitchShake 0.4s ease-in-out;
+    }
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap');
 
     /* Reset & box‑sizing */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+   
     body {
       background: #0a0a0a;
       color: #e0c097;
@@ -402,6 +413,10 @@
       let ok = true;
       let correctCount = 0;
       const inputs = document.querySelectorAll('#oghamInputs input');
+      const challenge = document.getElementById('challenge');
+      // trigger glitch
+      challenge.classList.add('glitch');
+      setTimeout(() => challenge.classList.remove('glitch'), 400);
       
       inputs.forEach(i=>{
         if ((i.value.toUpperCase()||'') === reverseMap[i.dataset.symbol]){
