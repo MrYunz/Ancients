@@ -7,276 +7,247 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+    /* --- GLOBAL --- */
+    *, *::before, *::after { box-sizing: border-box; }
     body {
       background: #0a0a0a;
-      color: #ccc;
-      font-family: 'Press Start 2P', monospace, monospace;
-      margin: 2em;
-      padding-left: 1rem;   /* Add horizontal padding */
-      padding-right: 1rem;  /* Add horizontal padding */
-      box-sizing: border-box; /* Include padding in width */
-      user-select: none;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
+      color: #e0c097;
+      font-family: 'Press Start 2P', monospace;
+      margin: 0;
+      padding: 2rem 1rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
+
     h1 {
-      text-align: center;
-      color: #9cf3ff;
-      text-shadow: 0 0 10px #00c8ff;
-      margin-bottom: 1rem;
+      color: #ffb347;
+      text-shadow: 0 0 8px #ff9533;
+      margin-bottom: 2rem;
       user-select: text;
     }
+
+    /* --- CHALLENGE CONTAINER --- */
+    #challenge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;        /* center grid + button */
+      width: 100%;
+      max-width: 520px;           /* no wider than this */
+      margin-bottom: 2rem;
+    }
+
     .alphabet-grid {
-      box-sizing: border-box;
       display: grid;
       grid-template-columns: repeat(6, 1fr);
       gap: 0.5em;
-      max-width: 480px; /* controls max width */
-      margin: 0 auto 1rem auto;   /* centers horizontally */
-      box-sizing: border-box;
+      width: 100%;
     }
+
     .alphabet-grid input {
-      background: #111;
-      border: 2px solid #444;
+      background: #221a0d;
+      border: 2px solid #553d24;
       border-radius: 4px;
-      color: #9cf3ff;
-      font-size: 1.3rem;
+      color: #e0c097;
+      font-size: 1.2rem;
       text-align: center;
       height: 3.5rem;
-      text-shadow: 0 0 5px #00c8ff;
-      transition: border-color 0.3s ease;
-      font-weight: bold;
-      user-select: text;
+      text-shadow: 0 0 4px #ff9533;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
     .alphabet-grid input::placeholder {
-      color: #005b7f;
+      color: #b07d4f;
       text-shadow: none;
     }
     .alphabet-grid input.correct {
-      border-color: #00ffad;
-      box-shadow: 0 0 8px #00ffad;
-      background: #002f25;
+      border-color: #ffd27f;
+      box-shadow: 0 0 6px #ffd27f;
+      background: #3b2a1c;
     }
     .alphabet-grid input.error {
-      border-color: #ff4c4c;
-      box-shadow: 0 0 8px #ff4c4c;
-      background: #2a0000;
+      border-color: #e05a00;
+      box-shadow: 0 0 6px #e05a00;
+      background: #331f12;
     }
+
     button {
-      display: block;
-      margin: 0 auto;
-      padding: 1em 2.5em;
+      margin-top: 1.5rem;
+      padding: 0.8em 2em;
       font-family: 'Press Start 2P', monospace;
-      font-size: 1.2rem;
-      color: #00ffc8;
-      background: #002f25;
-      border: 2px solid #00ffc8;
+      font-size: 1rem;
+      color: #331f12;
+      background: #ffd27f;
+      border: 2px solid #e05a00;
       border-radius: 6px;
       cursor: pointer;
-      text-shadow: 0 0 5px #00ffc8;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      user-select: none;
-      font-weight: bold;
-      letter-spacing: 2px;
+      text-shadow: 0 0 4px #b07d4f;
+      transition: background-color 0.2s ease, color 0.2s ease;
+      letter-spacing: 1px;
     }
     button:hover {
-      background: #00ffc8;
-      color: #002f25;
+      background: #e05a00;
+      color: #ffd27f;
       text-shadow: none;
     }
+
     #error {
-      color: #ff4c4c;
-      text-align: center;
-      font-family: monospace;
-      font-weight: bold;
-      margin-top: 1em;
+      color: #e05a00;
+      margin-top: 1rem;
       display: none;
-      user-select: text;
-      letter-spacing: 1.5px;
+      font-family: monospace;
+      letter-spacing: 1px;
     }
+
+    /* --- TRANSLATOR --- */
     #translator {
       display: none;
+      width: 100%;
       max-width: 600px;
-      margin: 2em auto 0 auto;
-      font-family: monospace;
+    }
+    label {
+      color: #ffd27f;
+      display: block;
+      margin-top: 1.5rem;
+      margin-bottom: 0.3rem;
+      font-weight: bold;
+      letter-spacing: 1px;
     }
     textarea {
       width: 100%;
-      height: 120px;
-      font-size: 1rem;
-      padding: 0.75em;
-      background: #111;
-      border: 2px solid #005b7f;
-      border-radius: 8px;
-      color: #9cf3ff;
+      height: 100px;
+      font-size: 0.9rem;
+      padding: 0.6em;
+      background: #221a0d;
+      border: 2px solid #553d24;
+      border-radius: 6px;
+      color: #e0c097;
       resize: vertical;
-      box-sizing: border-box;
       font-family: monospace;
-      text-shadow: 0 0 5px #00c8ff;
-      transition: border-color 0.3s ease;
-      user-select: text;
+      text-shadow: 0 0 4px #ff9533;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
     textarea:focus {
-      border-color: #00ffc8;
+      border-color: #ffd27f;
+      box-shadow: 0 0 8px #ffd27f;
       outline: none;
-      box-shadow: 0 0 12px #00ffc8;
-      background: #002f25;
-    }
-    label {
-      font-weight: bold;
-      margin-bottom: 0.3em;
-      display: block;
-      color: #00ffc8;
-      user-select: text;
-      letter-spacing: 1.2px;
+      background: #3b2a1c;
     }
     hr {
       border: none;
-      border-top: 1px solid #003e52;
+      border-top: 1px solid #553d24;
       margin: 2em 0;
     }
+
   </style>
 </head>
 <body>
+
   <h1>Yunz Lab</h1>
 
+  <!-- CHALLENGE PHASE -->
   <div id="challenge">
     <div class="alphabet-grid" id="oghamInputs"></div>
     <button onclick="checkAnswers()">UNLOCK</button>
     <p id="error">Incorrect. Try again.</p>
   </div>
 
+  <!-- TRANSLATOR PHASE -->
   <div id="translator">
-    <label for="inputEnglish">English to Ogham:</label>
-    <textarea id="inputEnglish" placeholder="Type English text here..."></textarea>
-    <textarea id="outputOgham" readonly placeholder="Ogham cipher output will appear here..."></textarea>
+    <label for="inputEnglish">English → Ogham</label>
+    <textarea id="inputEnglish" placeholder="Type English text..."></textarea>
+    <textarea id="outputOgham" readonly placeholder="Ogham output..."></textarea>
 
     <hr />
 
-    <label for="inputOgham">Ogham to English:</label>
-    <textarea id="inputOgham" placeholder="Type Ogham text here..."></textarea>
-    <textarea id="outputEnglish" readonly placeholder="English output will appear here..."></textarea>
+    <label for="inputOgham">Ogham → English</label>
+    <textarea id="inputOgham" placeholder="Paste Ogham here..."></textarea>
+    <textarea id="outputEnglish" readonly placeholder="English output..."></textarea>
   </div>
 
-<script>
-  const oghamMap = {
-    'A': 'ᚁ', 'B': 'ᚂ', 'C': 'ᚃ', 'D': 'ᚄ', 'E': 'ᚅ',
-    'F': 'ᚆ', 'G': 'ᚇ', 'H': 'ᚈ', 'I': 'ᚉ', 'J': 'ᚊ',
-    'K': 'ᚋ', 'L': 'ᚌ', 'M': 'ᚍ', 'N': 'ᚎ', 'O': 'ᚏ',
-    'P': 'ᚐ', 'Q': 'ᚑ', 'R': 'ᚒ', 'S': 'ᚓ', 'T': 'ᚔ',
-    'U': 'ᚕ', 'V': 'ᚖ', 'W': 'ᚗ', 'X': 'ᚘ', 'Y': 'ᚙ', 'Z': '᚜'
-  };
+  <script>
+    // Ogham maps
+    const oghamMap = {
+      'A':'ᚁ','B':'ᚂ','C':'ᚃ','D':'ᚄ','E':'ᚅ',
+      'F':'ᚆ','G':'ᚇ','H':'ᚈ','I':'ᚉ','J':'ᚊ',
+      'K':'ᚋ','L':'ᚌ','M':'ᚍ','N':'ᚎ','O':'ᚏ',
+      'P':'ᚐ','Q':'ᚑ','R':'ᚒ','S':'ᚓ','T':'ᚔ',
+      'U':'ᚕ','V':'ᚖ','W':'ᚗ','X':'ᚘ','Y':'ᚙ','Z':'᚜'
+    };
+    const reverseMap = {};
+    for (let k in oghamMap) reverseMap[oghamMap[k]] = k;
 
-  const reverseMap = {};
-  for (let key in oghamMap) reverseMap[oghamMap[key]] = key;
+    // A fixed scrambled order:
+    const scrambled = [
+      ['R',oghamMap.R],['G',oghamMap.G],['T',oghamMap.T],
+      ['K',oghamMap.K],['B',oghamMap.B],['P',oghamMap.P],
+      ['X',oghamMap.X],['L',oghamMap.L],['N',oghamMap.N],
+      ['H',oghamMap.H],['J',oghamMap.J],['S',oghamMap.S],
+      ['E',oghamMap.E],['Y',oghamMap.Y],['A',oghamMap.A],
+      ['W',oghamMap.W],['M',oghamMap.M],['Z',oghamMap.Z],
+      ['O',oghamMap.O],['C',oghamMap.C],['Q',oghamMap.Q],
+      ['F',oghamMap.F],['U',oghamMap.U],['V',oghamMap.V],
+      ['I',oghamMap.I],['D',oghamMap.D]
+    ];
 
-  // Fixed scrambled order (manually shuffled)
-  const scrambledAlphabet = [
-    ['R', oghamMap['R']],
-    ['G', oghamMap['G']],
-    ['T', oghamMap['T']],
-    ['K', oghamMap['K']],
-    ['B', oghamMap['B']],
-    ['P', oghamMap['P']],
-    ['X', oghamMap['X']],
-    ['L', oghamMap['L']],
-    ['N', oghamMap['N']],
-    ['H', oghamMap['H']],
-    ['J', oghamMap['J']],
-    ['S', oghamMap['S']],
-    ['E', oghamMap['E']],
-    ['Y', oghamMap['Y']],
-    ['A', oghamMap['A']],
-    ['W', oghamMap['W']],
-    ['M', oghamMap['M']],
-    ['Z', oghamMap['Z']],
-    ['O', oghamMap['O']],
-    ['C', oghamMap['C']],
-    ['Q', oghamMap['Q']],
-    ['F', oghamMap['F']],
-    ['U', oghamMap['U']],
-    ['V', oghamMap['V']],
-    ['I', oghamMap['I']],
-    ['D', oghamMap['D']]
-  ];
+    // Build challenge inputs
+    function buildInputs(){
+      const container = document.getElementById('oghamInputs');
+      container.innerHTML = '';
+      scrambled.forEach(([ltr,sym])=>{
+        let inp = document.createElement('input');
+        inp.dataset.symbol = sym;
+        inp.placeholder = sym;
+        inp.maxLength = 1;
+        container.appendChild(inp);
+      });
+    }
 
-  const oghamInputs = document.getElementById('oghamInputs');
-
-  // Function to build inputs based on scrambledAlphabet
-  function buildInputs() {
-    oghamInputs.innerHTML = ''; // clear any existing inputs
-    scrambledAlphabet.forEach(([letter, symbol]) => {
-      const input = document.createElement('input');
-      input.dataset.symbol = symbol;
-      input.placeholder = symbol;
-      input.maxLength = 1;
-      oghamInputs.appendChild(input);
-    });
-  }
-
-  // Check unlock status on page load
-  function isUnlocked() {
-    return localStorage.getItem('oghamUnlocked') === 'true';
-  }
-
-  function setUnlocked() {
-    localStorage.setItem('oghamUnlocked', 'true');
-  }
-
-  function checkAnswers() {
-    const inputs = oghamInputs.querySelectorAll('input');
-    let allCorrect = true;
-    inputs.forEach(input => {
-      const expected = reverseMap[input.dataset.symbol];
-      if (input.value.toUpperCase() === expected) {
-        input.classList.remove('error');
-        input.classList.add('correct');
+    // Check-and-unlock
+    function checkAnswers(){
+      let allOK = true;
+      document.querySelectorAll('#oghamInputs input').forEach(inp=>{
+        if ((inp.value.toUpperCase()||'') === reverseMap[inp.dataset.symbol]){
+          inp.classList.add('correct');
+          inp.classList.remove('error');
+        } else {
+          inp.classList.add('error');
+          inp.classList.remove('correct');
+          allOK = false;
+        }
+      });
+      if (allOK){
+        localStorage.setItem('oghamUnlocked','1');
+        document.getElementById('challenge').style.display='none';
+        document.getElementById('translator').style.display='block';
       } else {
-        input.classList.remove('correct');
-        input.classList.add('error');
-        allCorrect = false;
+        document.getElementById('error').style.display='block';
+      }
+    }
+
+    // Translators
+    function encodeOgham(txt){
+      return txt.split('').map(c=>oghamMap[c.toUpperCase()]||c).join('');
+    }
+    function decodeOgham(txt){
+      return txt.split('').map(c=>reverseMap[c]||c).join('');
+    }
+    document.getElementById('inputEnglish').addEventListener('input',e=>{
+      document.getElementById('outputOgham').value = encodeOgham(e.target.value);
+    });
+    document.getElementById('inputOgham').addEventListener('input',e=>{
+      document.getElementById('outputEnglish').value = decodeOgham(e.target.value);
+    });
+
+    // On load: build or skip
+    window.addEventListener('DOMContentLoaded',()=>{
+      if (localStorage.getItem('oghamUnlocked')) {
+        document.getElementById('challenge').style.display='none';
+        document.getElementById('translator').style.display='block';
+      } else {
+        buildInputs();
       }
     });
-
-    const errorMsg = document.getElementById('error');
-    if (allCorrect) {
-      setUnlocked();
-      document.getElementById('translator').style.display = 'block';
-      document.getElementById('challenge').style.display = 'none';
-      errorMsg.style.display = 'none';
-    } else {
-      errorMsg.style.display = 'block';
-    }
-  }
-
-  // On page load
-  window.onload = function() {
-    if (isUnlocked()) {
-      document.getElementById('translator').style.display = 'block';
-      document.getElementById('challenge').style.display = 'none';
-    } else {
-      buildInputs();
-    }
-  };
-
-  // Event listeners for translator textareas (if needed)
-  document.getElementById('inputEnglish').addEventListener('input', () => {
-    document.getElementById('outputOgham').value = translateToOgham(document.getElementById('inputEnglish').value);
-  });
-
-  document.getElementById('inputOgham').addEventListener('input', () => {
-    document.getElementById('outputEnglish').value = translateFromOgham(document.getElementById('inputOgham').value);
-  });
-
-  // Translators:
-  function translateToOgham(text) {
-    return text.split('').map(c => oghamMap[c.toUpperCase()] || c).join('');
-  }
-
-  function translateFromOgham(text) {
-    return text.split('').map(c => reverseMap[c] || c).join('');
-  }
-</script>
+  </script>
 </body>
 </html>
