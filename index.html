@@ -3,49 +3,160 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Yunz Lab</title>
+  <title>Ancient Desert Puzzle - Yunz Lab</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     /* Reset & Base */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
+    html, body { height: 100%; overflow-x: hidden; }
     body {
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 1rem;
-      background: #0a0a0a;
-      color: #e0c097;
+      background: linear-gradient(135deg, #2c1810 0%, #1a0f08 50%, #0d0704 100%);
+      color: #d4a574;
       font-family: 'Press Start 2P', monospace;
-      font-size: 14px;
-      background-image:
-        repeating-linear-gradient(0deg, #0a0a0a 0, #111 1px, #0a0a0a 2px),
-        repeating-linear-gradient(90deg, #0a0a0a 0, #111 1px, #0a0a0a 2px);
-      background-size: 4px 4px;
+      font-size: 12px;
+      position: relative;
       user-select: none;
     }
+    
+    /* Animated sand particles */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, #8b6914, transparent),
+        radial-gradient(2px 2px at 40px 70px, #a0731a, transparent),
+        radial-gradient(1px 1px at 90px 40px, #d4a574, transparent),
+        radial-gradient(1px 1px at 130px 80px, #8b6914, transparent),
+        radial-gradient(2px 2px at 160px 30px, #a0731a, transparent);
+      background-repeat: repeat;
+      background-size: 200px 100px;
+      animation: sandfall 20s linear infinite;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    @keyframes sandfall {
+      0% { transform: translateY(-100px); }
+      100% { transform: translateY(100vh); }
+    }
+    
+    /* Minecraft-style container */
     .container {
       position: relative;
       width: 100%;
-      max-width: 480px;
+      max-width: 600px;
       text-align: center;
+      background: linear-gradient(145deg, #3d2817 0%, #2c1810 50%, #1f0f08 100%);
+      border: 4px solid #8b6914;
+      border-radius: 0;
+      box-shadow: 
+        inset 0 0 0 2px #a0731a,
+        inset 0 0 0 4px #3d2817,
+        0 0 20px rgba(139, 105, 20, 0.5),
+        0 0 40px rgba(139, 105, 20, 0.2);
+      padding: 2rem;
+      z-index: 2;
+      position: relative;
     }
+    
+    /* Decorative corners */
+    .container::before,
+    .container::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #8b6914;
+      border: 2px solid #a0731a;
+    }
+    .container::before {
+      top: -4px;
+      left: -4px;
+      box-shadow: inset 2px 2px 0 #d4a574;
+    }
+    .container::after {
+      bottom: -4px;
+      right: -4px;
+      box-shadow: inset -2px -2px 0 #5c3f0d;
+    }
+    
+    /* Additional corner decorations */
+    .corner-tl, .corner-tr, .corner-bl, .corner-br {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #8b6914;
+      border: 2px solid #a0731a;
+    }
+    .corner-tr { top: -4px; right: -4px; box-shadow: inset -2px 2px 0 #d4a574; }
+    .corner-bl { bottom: -4px; left: -4px; box-shadow: inset 2px -2px 0 #d4a574; }
 
     /* Title */
     h1 {
-      font-family: 'Orbitron', monospace;
-      font-weight: 900;
-      font-size: 3rem;
-      letter-spacing: 4px;
-      color: #ffb347;
-      text-shadow: 4px 4px 0 #331f12, 0 0 8px #ff9533;
-      margin-bottom: 2rem;
-      animation: pulse 3s ease-in-out infinite alternate;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 2.5rem;
+      letter-spacing: 3px;
+      color: #d4a574;
+      text-shadow: 
+        2px 2px 0 #8b6914,
+        4px 4px 0 #5c3f0d,
+        0 0 20px #d4a574,
+        0 0 40px #a0731a;
+      margin-bottom: 1rem;
+      animation: ancientGlow 4s ease-in-out infinite alternate;
+      position: relative;
     }
-    @keyframes pulse {
-      from { text-shadow: 4px 4px 0 #331f12, 0 0 8px #ff9533; }
-      to   { text-shadow: 4px 4px 0 #331f12, 0 0 16px #ff9533; }
+    
+    h1::before {
+      content: '⚱';
+      position: absolute;
+      left: -50px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      color: #a0731a;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    h1::after {
+      content: '⚱';
+      position: absolute;
+      right: -50px;
+      top: 50%;
+      transform: translateY(-50%) scaleX(-1);
+      font-size: 1.5rem;
+      color: #a0731a;
+      animation: float 3s ease-in-out infinite reverse;
+    }
+    
+    @keyframes ancientGlow {
+      from { text-shadow: 2px 2px 0 #8b6914, 4px 4px 0 #5c3f0d, 0 0 20px #d4a574, 0 0 40px #a0731a; }
+      to { text-shadow: 2px 2px 0 #8b6914, 4px 4px 0 #5c3f0d, 0 0 30px #d4a574, 0 0 60px #a0731a; }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(-50%) translateX(0); }
+      50% { transform: translateY(-50%) translateX(5px); }
+    }
+
+    /* Subtitle */
+    .subtitle {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      color: #a0731a;
+      margin-bottom: 2rem;
+      text-shadow: 1px 1px 0 #5c3f0d;
     }
 
     /* Audio Control */
@@ -57,119 +168,333 @@
       flex-direction: column;
       align-items: flex-end;
       gap: 0.5rem;
+      background: rgba(45, 24, 16, 0.8);
+      padding: 8px;
+      border: 2px solid #8b6914;
+      border-radius: 4px;
     }
     .audio-toggle {
       width: 24px;
       height: 24px;
-      fill: #ffd27f;
+      fill: #d4a574;
       cursor: pointer;
       transition: fill 0.2s;
+      filter: drop-shadow(1px 1px 0 #5c3f0d);
     }
-    .audio-toggle:hover { fill: #ffb347; }
+    .audio-toggle:hover { fill: #a0731a; }
     .audio-slider {
       width: 80px;
       height: 12px;
-      background: #553d24;
-      outline: 2px solid #331f12;
-      outline-offset: -2px;
+      background: #5c3f0d;
+      border: 2px solid #8b6914;
       display: none;
+      border-radius: 2px;
     }
     .audio-slider::-webkit-slider-thumb {
       appearance: none;
-      width: 12px;
-      height: 12px;
-      background: #ffd27f;
-      border: 2px solid #331f12;
+      width: 16px;
+      height: 16px;
+      background: #d4a574;
+      border: 2px solid #8b6914;
       cursor: pointer;
+      border-radius: 0;
+      box-shadow: inset 1px 1px 0 #f4c584;
     }
-    .audio-slider:focus { outline: none; }
 
-    /* Challenge Grid */
+    /* Challenge Section */
     #challenge {
       margin-bottom: 2rem;
     }
+    
+    .challenge-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      color: #a0731a;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px 0 #5c3f0d;
+    }
+    
     .alphabet-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
       gap: 8px;
-      margin: 0 auto 1rem;
-      padding: 16px;
-      background: #221a0d;
-      border: 2px solid #553d24;
-      box-shadow: inset 2px 2px 0 #000, inset -2px -2px 0 #775533, 0 0 0 2px #331f12;
+      margin: 0 auto 1.5rem;
+      padding: 20px;
+      background: linear-gradient(145deg, #2c1810, #1a0f08);
+      border: 4px solid #8b6914;
+      box-shadow: 
+        inset 0 0 0 2px #a0731a,
+        inset 4px 4px 8px rgba(0,0,0,0.8),
+        0 0 15px rgba(139, 105, 20, 0.3);
+      position: relative;
     }
+    
+    /* Decorative elements on the grid */
+    .alphabet-grid::before {
+      content: '◊';
+      position: absolute;
+      top: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #8b6914;
+      font-size: 12px;
+    }
+    
     .alphabet-grid input {
-      width: 80px;
-      height: 50px;
-      background: #221a0d;
-      border: 2px solid #553d24;
-      color: #e0c097;
-      font-size: 1.2rem;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(145deg, #3d2817, #2c1810);
+      border: 3px solid #8b6914;
+      color: #d4a574;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 1rem;
       text-align: center;
       text-shadow: 1px 1px 0 #000;
-      transition: all 0.2s;
+      transition: all 0.3s;
+      position: relative;
+      box-shadow: 
+        inset 1px 1px 0 #a0731a,
+        inset -1px -1px 0 #1a0f08,
+        0 2px 4px rgba(0,0,0,0.5);
     }
+    
     .alphabet-grid input::placeholder {
-      color: #ffb347;
-      font-size: 1.5rem;
+      color: #a0731a;
+      font-size: 1.2rem;
       text-shadow: 1px 1px 0 #000;
     }
-    .alphabet-grid input.correct { border-color: #ffd27f; box-shadow: 0 0 6px #ffd27f; background: #3b2a1c; }
-    .alphabet-grid input.error { border-color: #e05a00; box-shadow: 0 0 6px #e05a00; background: #331f12; }
-    @keyframes shake { 0%,100%{transform:none;}20%,60%{transform:translateX(-5px);}40%,80%{transform:translateX(5px);} }
-    .glitch { animation: shake 0.4s ease-in-out; }
-
-    /* Buttons & Messages */
-    button {
-      padding: 12px 24px;
-      font-size: 1rem;
-      background: #ffd27f;
-      border: 2px solid #e05a00;
-      color: #331f12;
-      cursor: pointer;
-      box-shadow: 2px 2px 0 #000;
-      transition: background 0.2s;
+    
+    .alphabet-grid input:focus {
+      outline: none;
+      border-color: #d4a574;
+      box-shadow: 
+        inset 1px 1px 0 #f4c584,
+        inset -1px -1px 0 #1a0f08,
+        0 0 10px rgba(212, 165, 116, 0.5);
     }
-    button:hover { background: #e05a00; color: #ffd27f; }
-    #error, #cooldown { margin-top: 1rem; font-size: 0.9rem; }
-    #error { color: #e05a00; display: none; }
-    #cooldown { color: #ffb347; display: none; }
+    
+    .alphabet-grid input.correct { 
+      border-color: #d4a574; 
+      box-shadow: 0 0 15px #d4a574; 
+      background: linear-gradient(145deg, #4d3520, #3d2817);
+      animation: correctPulse 1s ease-in-out;
+    }
+    
+    .alphabet-grid input.error { 
+      border-color: #cc6600; 
+      box-shadow: 0 0 15px #cc6600; 
+      background: linear-gradient(145deg, #4d2817, #3d1810);
+    }
+    
+    @keyframes correctPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    @keyframes shake { 
+      0%,100%{transform:none;}
+      20%,60%{transform:translateX(-8px);}
+      40%,80%{transform:translateX(8px);} 
+    }
+    .glitch { animation: shake 0.6s ease-in-out; }
+
+    /* Buttons */
+    button {
+      padding: 15px 30px;
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      background: linear-gradient(145deg, #d4a574, #a0731a);
+      border: 3px solid #8b6914;
+      color: #2c1810;
+      cursor: pointer;
+      box-shadow: 
+        inset 1px 1px 0 #f4c584,
+        inset -1px -1px 0 #8b6914,
+        0 4px 8px rgba(0,0,0,0.3);
+      transition: all 0.2s;
+      text-shadow: 1px 1px 0 rgba(255,255,255,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    
+    button:hover::before {
+      left: 100%;
+    }
+    
+    button:hover { 
+      background: linear-gradient(145deg, #f4c584, #d4a574);
+      transform: translateY(-2px);
+      box-shadow: 
+        inset 1px 1px 0 #f4c584,
+        inset -1px -1px 0 #8b6914,
+        0 6px 12px rgba(0,0,0,0.4);
+    }
+    
+    button:active {
+      transform: translateY(0);
+      box-shadow: 
+        inset 1px 1px 0 #8b6914,
+        inset -1px -1px 0 #f4c584,
+        0 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    button:disabled {
+      background: linear-gradient(145deg, #5c3f0d, #3d2817);
+      color: #8b6914;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Messages */
+    #error, #cooldown { 
+      margin-top: 1rem; 
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      padding: 10px;
+      border-radius: 4px;
+      text-shadow: 1px 1px 0 #000;
+    }
+    #error { 
+      color: #cc6600; 
+      display: none;
+      background: rgba(204, 102, 0, 0.1);
+      border: 1px solid #cc6600;
+    }
+    #cooldown { 
+      color: #a0731a; 
+      display: none;
+      background: rgba(160, 115, 26, 0.1);
+      border: 1px solid #a0731a;
+    }
 
     /* Translator */
     #translator { display: none; }
     .reader-btn {
-      margin-bottom: 1rem;
-      padding: 10px 20px;
+      margin-bottom: 1.5rem;
+      padding: 12px 25px;
+      font-family: 'Cinzel', serif;
       font-size: 1rem;
-      background: #ffb347;
-      border: none;
-      color: #0a0a0a;
+      background: linear-gradient(145deg, #a0731a, #8b6914);
+      border: 3px solid #d4a574;
+      color: #f4c584;
       cursor: pointer;
+      box-shadow: 
+        inset 1px 1px 0 #d4a574,
+        0 4px 8px rgba(0,0,0,0.3);
     }
-    label { color: #ffd27f; margin-top: 1.5rem; display: block; font-size: 1rem; }
+    
+    label { 
+      color: #d4a574; 
+      margin-top: 1.5rem; 
+      display: block; 
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      text-shadow: 1px 1px 0 #5c3f0d;
+      margin-bottom: 0.5rem;
+    }
+    
     textarea {
       width: 100%;
       height: 120px;
-      padding: 8px;
-      background: linear-gradient(135deg, #221a0d, #1a140a);
-      border: 2px solid #553d24;
-      color: #e0c097;
-      font-size: 1rem;
-      text-shadow: 0 0 4px #ff9533;
+      padding: 12px;
+      background: linear-gradient(145deg, #2c1810, #1a0f08);
+      border: 3px solid #8b6914;
+      color: #d4a574;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.9rem;
+      text-shadow: 0 0 4px rgba(212, 165, 116, 0.3);
       transition: all 0.3s;
+      resize: vertical;
+      box-shadow: 
+        inset 2px 2px 4px rgba(0,0,0,0.8),
+        0 0 10px rgba(139, 105, 20, 0.2);
     }
-    textarea:focus { outline: none; border-color: #ffd27f; box-shadow: 0 0 8px #ffd27f; background: linear-gradient(135deg, #3b2a1c, #2d1f13); }
-    textarea[readonly] { background: linear-gradient(135deg, #1a140a, #221a0d); color: #ffb347; }
-    hr { border: none; border-top: 2px solid #553d24; margin: 2rem 0; }
+    
+    textarea:focus { 
+      outline: none; 
+      border-color: #d4a574; 
+      box-shadow: 
+        inset 2px 2px 4px rgba(0,0,0,0.8),
+        0 0 15px rgba(212, 165, 116, 0.4);
+      background: linear-gradient(145deg, #3d2817, #2c1810);
+    }
+    
+    textarea[readonly] { 
+      background: linear-gradient(145deg, #1a0f08, #2c1810); 
+      color: #a0731a;
+      cursor: not-allowed;
+    }
+    
+    hr { 
+      border: none; 
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #8b6914, transparent);
+      margin: 2rem 0;
+      position: relative;
+    }
+    
+    hr::before {
+      content: '◊';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: #2c1810;
+      color: #8b6914;
+      padding: 0 10px;
+      font-size: 1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container { 
+        max-width: 95%;
+        padding: 1.5rem;
+      }
+      h1 { 
+        font-size: 2rem;
+      }
+      h1::before, h1::after {
+        display: none;
+      }
+      .alphabet-grid {
+        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+        gap: 6px;
+        padding: 15px;
+      }
+      .alphabet-grid input {
+        width: 50px;
+        height: 50px;
+        font-size: 0.9rem;
+      }
+    }
   </style>
 </head>
 <body oncontextmenu="return false;" onkeydown="if(event.key==='F12'||(event.ctrlKey&&event.shiftKey&&(event.key==='I'||event.key==='J'))||(event.ctrlKey&&event.key==='U'))event.preventDefault();">
   <div class="container">
+    <div class="corner-tr"></div>
+    <div class="corner-bl"></div>
+    
     <h1>YUNZ LAB</h1>
+    <div class="subtitle">Ancient Desert Codex</div>
 
     <!-- Audio Control -->
     <div class="audio-control">
-      <svg id="audioToggle" class="audiotoggle" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg>
+      <svg id="audioToggle" class="audio-toggle" viewBox="0 0 24 24">
+        <path d="M3 9v6h4l5 5V4L7 9H3z"/>
+      </svg>
       <input id="volumeSlider" class="audio-slider" type="range" min="0" max="1" step="0.01" value="0.5">
     </div>
     <audio id="bgAudio" loop>
@@ -178,22 +503,23 @@
 
     <!-- Challenge -->
     <div id="challenge">
-      <div class="alphabetgrid" id="oghamInputs"></div>
-      <button id="unlockBtn" onclick="checkAnswers()">UNLOCK</button>
-      <p id="error">WRONG SEQUENCE...</p>
+      <div class="challenge-title">Decipher the Ancient Symbols</div>
+      <div class="alphabet-grid" id="oghamInputs"></div>
+      <button id="unlockBtn" onclick="checkAnswers()">🔓 UNLOCK THE CODEX</button>
+      <p id="error">❌ The spirits reject your offering...</p>
       <p id="cooldown"></p>
     </div>
 
     <!-- Translator -->
     <div id="translator">
-      <button class="readerbtn" onclick="enterReader()">READER</button>
-      <label for="inputEnglish">ENCODE MESSAGE</label>
-      <textarea id="inputEnglish" placeholder="Enter message..."></textarea>
-      <textarea id="outputOgham" readonly placeholder="Symbols..."></textarea>
+      <button class="reader-btn" onclick="enterReader()">📜 ENTER READER MODE</button>
+      <label for="inputEnglish">🖋️ ENCODE MESSAGE INTO ANCIENT SCRIPT</label>
+      <textarea id="inputEnglish" placeholder="Enter your message to encode..."></textarea>
+      <textarea id="outputOgham" readonly placeholder="Ancient symbols will appear here..."></textarea>
       <hr>
-      <label for="inputOgham">DECODE TEXT</label>
-      <textarea id="inputOgham" placeholder="Paste symbols..."></textarea>
-      <textarea id="outputEnglish" readonly placeholder="Translation..."></textarea>
+      <label for="inputOgham">🔍 DECODE ANCIENT SCRIPT TO MODERN TEXT</label>
+      <textarea id="inputOgham" placeholder="Paste ancient symbols here..."></textarea>
+      <textarea id="outputEnglish" readonly placeholder="Modern translation will appear here..."></textarea>
     </div>
   </div>
 
@@ -226,7 +552,12 @@
         inp.placeholder = sym;
         inp.dataset.sym = sym;
         inp.maxLength = 1;
-        inp.addEventListener('input', e => e.target.value = e.target.value.toUpperCase());
+        inp.addEventListener('input', e => {
+          e.target.value = e.target.value.toUpperCase();
+          // Add typing effect
+          e.target.style.transform = 'scale(1.1)';
+          setTimeout(() => e.target.style.transform = 'scale(1)', 150);
+        });
         ogInputs.appendChild(inp);
       });
     }
@@ -241,7 +572,7 @@
       const now = Date.now();
       if (now < lockUntil) {
         unlockBtn.disabled = true;
-        cooldownMsg.textContent = `COOLDOWN: ${Math.ceil((lockUntil - now)/1000)}s`;
+        cooldownMsg.textContent = `⏳ The ancient spirits are displeased... Wait ${Math.ceil((lockUntil - now)/1000)}s`;
         cooldownMsg.style.display = 'block';
         setTimeout(tickCooldown, 500);
       } else {
@@ -253,7 +584,10 @@
     }
     function attemptReset() {
       attempts = 0;
-      document.querySelectorAll('#oghamInputs input').forEach(i => i.value = '');
+      document.querySelectorAll('#oghamInputs input').forEach(i => {
+        i.value = '';
+        i.classList.remove('correct', 'error');
+      });
     }
 
     // Check answers
@@ -262,20 +596,36 @@
       errorMsg.style.display = 'none';
 
       const inputs = [...ogInputs.children];
-      const allCorrect = inputs.every(inp => inp.value === reverseMap[inp.dataset.sym]);
+      const allCorrect = inputs.every(inp => {
+        const isCorrect = inp.value === reverseMap[inp.dataset.sym];
+        inp.classList.remove('correct', 'error');
+        if (inp.value) {
+          inp.classList.add(isCorrect ? 'correct' : 'error');
+        }
+        return isCorrect;
+      });
 
       if (allCorrect) {
-        localStorage.setItem('unlocked', '1');
-        challengeEl.style.display = 'none';
-        translatorEl.style.display = 'block';
+        // Success animation
+        inputs.forEach((inp, i) => {
+          setTimeout(() => {
+            inp.style.animation = 'correctPulse 0.6s ease-in-out';
+          }, i * 100);
+        });
+        
+        setTimeout(() => {
+          challengeEl.style.display = 'none';
+          translatorEl.style.display = 'block';
+        }, 1000);
       } else {
         attempts++;
         challengeEl.classList.add('glitch');
-        setTimeout(() => challengeEl.classList.remove('glitch'), 400);
+        setTimeout(() => challengeEl.classList.remove('glitch'), 600);
 
         if (attempts >= 3) {
           startCooldown();
         } else {
+          errorMsg.textContent = `❌ The spirits reject your offering... (${3-attempts} attempts remaining)`;
           errorMsg.style.display = 'block';
         }
       }
@@ -284,8 +634,13 @@
     // Translate
     function encode(text) {return text.split('').map(c=>oghamMap[c.toUpperCase()]||c).join('');}
     function decode(text) {return text.split('').map(c=>reverseMap[c]||c).join('');}
-    document.getElementById('inputEnglish').addEventListener('input', e=> document.getElementById('outputOgham').value = encode(e.target.value));
-    document.getElementById('inputOgham').addEventListener('input', e=> document.getElementById('outputEnglish').value = decode(e.target.value));
+    
+    document.getElementById('inputEnglish').addEventListener('input', e=> {
+      document.getElementById('outputOgham').value = encode(e.target.value);
+    });
+    document.getElementById('inputOgham').addEventListener('input', e=> {
+      document.getElementById('outputEnglish').value = decode(e.target.value);
+    });
 
     // Reader button
     function enterReader() {
@@ -301,10 +656,18 @@
 
     // Initialization
     window.addEventListener('DOMContentLoaded', () => {
-      if (localStorage.getItem('unlocked')) enterReader();
       buildInputs();
       bgAudio.volume = volumeSlider.value;
       bgAudio.play().catch(()=>{});
+      
+      // Add entrance animation
+      document.querySelector('.container').style.opacity = '0';
+      document.querySelector('.container').style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        document.querySelector('.container').style.transition = 'all 1s ease-out';
+        document.querySelector('.container').style.opacity = '1';
+        document.querySelector('.container').style.transform = 'translateY(0)';
+      }, 100);
     });
   </script>
 </body>
