@@ -1,68 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Yunz Lab</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
     body {
-      background: #121212;
-      color: #eee;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0a0a0a;
+      color: #ccc;
+      font-family: 'Press Start 2P', monospace, monospace;
       margin: 2em;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
     }
     h1 {
       text-align: center;
-    }
-    textarea, input {
-      width: 100%;
-      font-size: 1em;
-      padding: 0.5em;
-      background: #222;
-      border: none;
-      border-radius: 5px;
-      color: #eee;
-      margin-bottom: 1em;
-      box-sizing: border-box;
-    }
-    label {
-      margin-top: 1em;
-      display: block;
-      font-weight: bold;
-    }
-    .section {
-      display: none;
+      color: #9cf3ff;
+      text-shadow: 0 0 10px #00c8ff;
+      margin-bottom: 1rem;
+      user-select: text;
     }
     .alphabet-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
       gap: 0.5em;
+      max-width: 500px;
+      margin: 0 auto 1rem auto;
     }
-    .correct {
-      border: 2px solid #0f0;
+    .alphabet-grid input {
+      background: #111;
+      border: 2px solid #444;
+      border-radius: 4px;
+      color: #9cf3ff;
+      font-size: 1.3rem;
+      text-align: center;
+      height: 3.5rem;
+      text-shadow: 0 0 5px #00c8ff;
+      transition: border-color 0.3s ease;
+      font-weight: bold;
+      user-select: text;
     }
-    .error {
-      border: 2px solid #f00;
+    .alphabet-grid input::placeholder {
+      color: #005b7f;
+      text-shadow: none;
+    }
+    .alphabet-grid input.correct {
+      border-color: #00ffad;
+      box-shadow: 0 0 8px #00ffad;
+      background: #002f25;
+    }
+    .alphabet-grid input.error {
+      border-color: #ff4c4c;
+      box-shadow: 0 0 8px #ff4c4c;
+      background: #2a0000;
+    }
+    button {
+      display: block;
+      margin: 0 auto;
+      padding: 1em 2.5em;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 1.2rem;
+      color: #00ffc8;
+      background: #002f25;
+      border: 2px solid #00ffc8;
+      border-radius: 6px;
+      cursor: pointer;
+      text-shadow: 0 0 5px #00ffc8;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      user-select: none;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    button:hover {
+      background: #00ffc8;
+      color: #002f25;
+      text-shadow: none;
+    }
+    #error {
+      color: #ff4c4c;
+      text-align: center;
+      font-family: monospace;
+      font-weight: bold;
+      margin-top: 1em;
+      display: none;
+      user-select: text;
+      letter-spacing: 1.5px;
+    }
+    #translator {
+      display: none;
+      max-width: 600px;
+      margin: 2em auto 0 auto;
+      font-family: monospace;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      font-size: 1rem;
+      padding: 0.75em;
+      background: #111;
+      border: 2px solid #005b7f;
+      border-radius: 8px;
+      color: #9cf3ff;
+      resize: vertical;
+      box-sizing: border-box;
+      font-family: monospace;
+      text-shadow: 0 0 5px #00c8ff;
+      transition: border-color 0.3s ease;
+      user-select: text;
+    }
+    textarea:focus {
+      border-color: #00ffc8;
+      outline: none;
+      box-shadow: 0 0 12px #00ffc8;
+      background: #002f25;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 0.3em;
+      display: block;
+      color: #00ffc8;
+      user-select: text;
+      letter-spacing: 1.2px;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #003e52;
+      margin: 2em 0;
     }
   </style>
 </head>
 <body>
-
   <h1>Yunz Lab</h1>
 
   <div id="challenge">
-    <p><strong>Enter the English letter for each symbol to prove you understand the Ogham:</strong></p>
     <div class="alphabet-grid" id="oghamInputs"></div>
-    <button onclick="checkAnswers()">Unlock Translator</button>
-    <p id="error" style="color: #f66; display:none;">Incorrect. Try again.</p>
+    <button onclick="checkAnswers()">UNLOCK</button>
+    <p id="error">Incorrect. Try again.</p>
   </div>
 
-  <div id="translator" class="section">
+  <div id="translator">
     <label for="inputEnglish">English to Ogham:</label>
     <textarea id="inputEnglish" placeholder="Type English text here..."></textarea>
     <textarea id="outputOgham" readonly placeholder="Ogham cipher output will appear here..."></textarea>
 
-    <hr style="margin:2em 0; border: none; border-top: 1px solid #444;" />
+    <hr />
 
     <label for="inputOgham">Ogham to English:</label>
     <textarea id="inputOgham" placeholder="Type Ogham text here..."></textarea>
@@ -97,9 +182,10 @@
       document.getElementById('outputEnglish').value = translateFromOgham(document.getElementById('inputOgham').value);
     });
 
-    // Create the challenge grid
+    // Create inputs for each ogham letter
     const oghamInputs = document.getElementById('oghamInputs');
     const correctAnswers = Object.entries(oghamMap);
+
     correctAnswers.forEach(([letter, symbol]) => {
       const input = document.createElement('input');
       input.dataset.symbol = symbol;
@@ -123,11 +209,13 @@
         }
       });
 
+      const errorMsg = document.getElementById('error');
       if (allCorrect) {
         document.getElementById('translator').style.display = 'block';
         document.getElementById('challenge').style.display = 'none';
+        errorMsg.style.display = 'none';
       } else {
-        document.getElementById('error').style.display = 'block';
+        errorMsg.style.display = 'block';
       }
     }
   </script>
